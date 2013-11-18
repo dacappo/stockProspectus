@@ -6,6 +6,3 @@
  */
 
 include "db_connection.php";
-
-$con = connectToDB("localhost","dacappa","veryoftirjoicTeg3","dacappa_stockProspectus");
-initializeDB($con);

@@ -56,97 +56,42 @@
 </head>
 <body>
 <table>
-	<tr><th>ISIN</th><th>Name</th><th>Value</th></tr>
+	<tr><th>ISIN</th><th>Value</th></tr>
 
 <?php
-$start = microtime(true);
 
 // Include the library
-include('simple_html_dom.php');
 include('db_connection.php');
 
 // Attributes
 $ISINs = array();
 $Names = array();
 $Values = array();
- 
-// Retrieve the DOM from a given URL
-$html = file_get_html('http://www.finanzen.net/index/Dax');
 
-foreach($html->find('div.double_row_performance') as $e) {
-	
-	foreach($e->find('tr') as $tr) {
-		echo '<tr>';
-		$aktie = $tr->find('td');
-		if (sizeof($aktie) > 0) {
-			echo '<td>';
-			//echo $aktie[0]->find('a',0)->plaintext;
-            $num = explode("\n",$aktie[0]->plaintext);
-            echo $num[1];
-            array_push($ISINs, $num[1]);
-            echo '</td>';
-            echo '<td>';
-
-            if (substr($num[0],-2,1) == "N") {
-                echo substr($num[0],0,strlen($num[0])-3);
-                array_push($Names, substr($num[0],0,strlen($num[0])-3));
-            } else {
-                echo $num[0];
-                array_push($Names, $num[0]);
-            }
-
-			echo '</td>';
-			echo '<td class=price>';
-			$num = explode("\n",$aktie[1]->plaintext);
-			echo $num[0] . " &#8364;";
-            array_push($Values, $num[0]);
-			echo '</td>';
-
-
-		}
-		echo '</tr>';
-	}
-	
-}
-
-// Write to DB
 
 $con = connectToDB("localhost","dacappa","veryoftirjoicTeg3","dacappa_stockProspectus");
-$date = new DateTime();
-$timestamp = $date->getTimestamp();
+$query = "SELECT * FROM ShareValues ORDER BY Timestamp DESC LIMIT 30";
 
+$result = mysqli_query($con,$query);
 
+while($row = mysqli_fetch_array($result)){
+    echo '<tr>';
+    echo '<td>';
+    echo $row['ISIN'];
+    echo '</td>';
+    echo '<td>';
+    echo $row['Value'] . "&euro;";
+    echo '</td>';
+    echo '</tr>';
+}
 
-
-
-
-$end = microtime(true);
- 
-$laufzeit = $end - $start;
-
+mysqli_close($con);
 
 ?>
 </table>
-<div class=statistic>
-<?php
-	echo "Runtime: ".$laufzeit." seconds!";
-?>
-</div>
-
-<?php
-
-for($i = 0; $i < sizeof($ISINs) && $i < sizeof($Names) && $i < sizeof($Values); $i++) {
-    $query ="INSERT INTO sharevalues VALUES ('" . substr($ISINs[$i],0,12) . "', CURRENT_TIMESTAMP, " . str_replace(",",".",$Values[$i]) . ")";
-    echo $query;
-
-    if (mysqli_query($con,$query)){
-        echo "Query ran successfully: " . $query . "<br>";
-    } else {
-        echo "Error running query: " . mysqli_error($con) . "<br>";
-    }
-}
-
-?>
 
 </body>
 </html>
+
+
+
