@@ -116,16 +116,7 @@ $date = new DateTime();
 $timestamp = $date->getTimestamp();
 
 
-for($i = 0; $i < sizeof($ISINs) && $i < sizeof($Names) && $i < sizeof($Values); $i++) {
-    $query ="INSERT INTO sharevalues VALUES ('" . substr($ISINs[$i],0,12) . "', CURRENT_TIMESTAMP, " . str_replace(",",".",$Values[$i]) . ")";
-    echo $query;
 
-    if (mysqli_query($con,$query)){
-        echo "Query ran successfully: " . $query . "<br>";
-    } else {
-        echo "Error running query: " . mysqli_error($con) . "<br>";
-    }
-}
 
 
 
@@ -141,6 +132,21 @@ $laufzeit = $end - $start;
 	echo "Runtime: ".$laufzeit." seconds!";
 ?>
 </div>
+
+<?php
+
+for($i = 0; $i < sizeof($ISINs) && $i < sizeof($Names) && $i < sizeof($Values); $i++) {
+    $query ="INSERT INTO sharevalues VALUES ('" . substr($ISINs[$i],0,12) . "', CURRENT_TIMESTAMP, " . str_replace(",",".",$Values[$i]) . ")";
+    echo $query;
+
+    if (mysqli_query($con,$query)){
+        echo "Query ran successfully: " . $query . "<br>";
+    } else {
+        echo "Error running query: " . mysqli_error($con) . "<br>";
+    }
+}
+
+?>
 
 </body>
 </html>
