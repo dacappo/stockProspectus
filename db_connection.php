@@ -24,7 +24,7 @@ function initializeDB($con) {
     array_push($sql, "DROP TABLE Shares");
     array_push($sql, "DROP TABLE ShareValues");
     array_push($sql, "CREATE TABLE Shares(ISIN CHAR(12) NOT NULL PRIMARY KEY, Name  VARCHAR(30))");
-    array_push($sql, "CREATE TABLE ShareValues(ISIN CHAR(12) NOT NULL, Timestamp TIMESTAMP NOT NULL, Value  DOUBLE, PRIMARY KEY(ISIN, Timestamp))");
+    array_push($sql, "CREATE TABLE ShareValues(ISIN CHAR(12) NOT NULL, Timestamp TIMESTAMP NOT NULL, Value  DOUBLE(6,2), PRIMARY KEY(ISIN, Timestamp))");
 
     // Execute queries
     foreach ($sql as $query) {

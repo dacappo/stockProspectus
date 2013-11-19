@@ -5,7 +5,7 @@
 	<style type=text/css>
 		html {
 			color: #6678b1;
-			font-family: Segoe UI Light;
+			font-family: Segoe UI Light, Verdana;
 		}
 		
 		table {
@@ -79,7 +79,7 @@ while($row = mysqli_fetch_array($result)){
     echo '<td>';
     echo $row['ISIN'];
     echo '</td>';
-    echo '<td>';
+    echo '<td class="price">';
     echo $row['Value'] . "&euro;";
     echo '</td>';
     echo '</tr>';

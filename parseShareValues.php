@@ -44,16 +44,8 @@ foreach($html->find('div.double_row_performance') as $e) {
 // Write to DB
 
 $con = connectToDB("localhost","dacappa","veryoftirjoicTeg3","dacappa_stockProspectus");
-$date = new DateTime();
-$timestamp = $date->getTimestamp();
-
 
 $end = microtime(true);
-
-$laufzeit = $end - $start;
-
-
-echo "<div style='background-color:black; color:white;' >Runtime: ".$laufzeit." seconds!</div>";
 
 
 for($i = 0; $i < sizeof($ISINs) && $i < sizeof($Names) && $i < sizeof($Values); $i++) {
@@ -66,5 +58,10 @@ for($i = 0; $i < sizeof($ISINs) && $i < sizeof($Names) && $i < sizeof($Values); 
         echo "Error running query: " . mysqli_error($con) . "<br>";
     }
 }
+
+mysqli_close($con);
+
+$laufzeit = $end - $start;
+echo "<div style='background-color:black; color:white;' >Runtime: ".$laufzeit." seconds!</div>";
 
 ?>
