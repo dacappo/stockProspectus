@@ -21,6 +21,10 @@
             text-align: center;
         }
 
+        .price {
+            text-align: right;
+        }
+
     </style>
 
 
@@ -42,6 +46,7 @@
                 <span class="icon-bar"></span>
                 <span class="icon-bar"></span>
             </button>
+
             <a class="navbar-brand" href="#">Share Prospectus</a>
         </div>
         <div class="collapse navbar-collapse">
@@ -83,7 +88,10 @@ $Values = array();
 
 
 $con = connectToDB("localhost","dacappa","veryoftirjoicTeg3","dacappa_stockProspectus");
-$query = "SELECT Shares.Name, Shares.ISIN, ShareValues.Value, ShareValues.Timestamp FROM Shares, ShareValues WHERE Shares.ISIN = ShareValues.ISIN ORDER BY ShareValues.Timestamp DESC LIMIT 30";
+//$query = "SELECT Shares.Name, Shares.ISIN, ShareValues.Value, ShareValues.Timestamp FROM Shares, ShareValues WHERE Shares.ISIN = ShareValues.ISIN ORDER BY ShareValues.Timestamp DESC LIMIT 30";
+
+$query = "SELECT * FROM (SELECT Shares.Name, Shares.ISIN, ShareValues.Value, ShareValues.Timestamp FROM Shares, ShareValues WHERE Shares.ISIN = ShareValues.ISIN ORDER BY ShareValues.Timestamp DESC LIMIT 30) AS test ORDER BY Name";
+
 
 $result = mysqli_query($con,$query);
 mysqli_close($con);
