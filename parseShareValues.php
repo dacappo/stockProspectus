@@ -49,20 +49,20 @@ $end = microtime(true);
 
 
 for($i = 0; $i < sizeof($ISINs) && $i < sizeof($Names) && $i < sizeof($Values); $i++) {
-    $queryForShare = "INSERT INTO shares VALUES ('" . substr($ISINs[$i],0,12) . "', '" . $Names[$i] . "') ON DUPLICATE KEY UPDATE ISIN = ISIN";
-    $queryForValue ="INSERT INTO sharevalues VALUES ('" . substr($ISINs[$i],0,12) . "', CURRENT_TIMESTAMP, " . str_replace(",",".",$Values[$i]) . ")";
+    $queryForShare = "INSERT INTO Shares VALUES ('" . substr($ISINs[$i],0,12) . "', '" . $Names[$i] . "') ON DUPLICATE KEY UPDATE ISIN = ISIN";
+    $queryForValue ="INSERT INTO ShareValues VALUES ('" . substr($ISINs[$i],0,12) . "', CURRENT_TIMESTAMP, " . str_replace(",",".",$Values[$i]) . ")";
     echo $query;
 
     if (mysqli_query($con,$queryForShare)){
         echo "Query ran successfully: " . $queryForShare . "<br>";
     } else {
-        echo "Error running query: " . mysqli_error($con) . "<br>";
+        echo "Error running query: " . mysqli_error($con) . " : " . $queryForValue . "<br>";
     }
 
     if (mysqli_query($con,$queryForValue)){
         echo "Query ran successfully: " . $queryForValue . "<br>";
     } else {
-        echo "Error running query: " . mysqli_error($con) . "<br>";
+        echo "Error running query: " . mysqli_error($con) . " : " . $queryForValue . "<br>";
     }
 }
 

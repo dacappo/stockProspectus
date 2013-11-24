@@ -23,10 +23,10 @@
   </component>
   <component name="FileEditorManager">
     <leaf>
-      <file leaf-file-name="index.php" pinned="false" current="true" current-in-tab="true">
+      <file leaf-file-name="index.php" pinned="false" current="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/index.php">
           <provider selected="true" editor-type-id="text-editor">
-            <state line="67" column="40" selection-start="2262" selection-end="2262" vertical-scroll-proportion="0.68941504" vertical-offset="510" max-vertical-offset="3405">
+            <state line="67" column="40" selection-start="2262" selection-end="2262" vertical-scroll-proportion="-30.625" vertical-offset="270" max-vertical-offset="3405">
               <folding />
             </state>
           </provider>
@@ -35,16 +35,16 @@
       <file leaf-file-name="db_connection.php" pinned="false" current="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/db_connection.php">
           <provider selected="true" editor-type-id="text-editor">
-            <state line="32" column="16" selection-start="1004" selection-end="1004" vertical-scroll-proportion="-17.5" vertical-offset="0" max-vertical-offset="630">
+            <state line="25" column="42" selection-start="525" selection-end="525" vertical-scroll-proportion="-13.125" vertical-offset="0" max-vertical-offset="645">
               <folding />
             </state>
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="parseShareValues.php" pinned="false" current="false" current-in-tab="false">
+      <file leaf-file-name="parseShareValues.php" pinned="false" current="true" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/parseShareValues.php">
           <provider selected="true" editor-type-id="text-editor">
-            <state line="51" column="141" selection-start="1288" selection-end="1288" vertical-scroll-proportion="-17.958334" vertical-offset="334" max-vertical-offset="1185">
+            <state line="58" column="85" selection-start="1669" selection-end="1669" vertical-scroll-proportion="0.63064295" vertical-offset="409" max-vertical-offset="1185">
               <folding>
                 <element signature="e#6#63#0" expanded="true" />
               </folding>
@@ -55,7 +55,7 @@
       <file leaf-file-name="initializeDatabase.php" pinned="false" current="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/initializeDatabase.php">
           <provider selected="true" editor-type-id="text-editor">
-            <state line="10" column="19" selection-start="204" selection-end="204" vertical-scroll-proportion="-6.25" vertical-offset="0" max-vertical-offset="255">
+            <state line="8" column="0" selection-start="95" selection-end="184" vertical-scroll-proportion="-5.0" vertical-offset="0" max-vertical-offset="255">
               <folding>
                 <element signature="e#6#63#0" expanded="true" />
               </folding>
@@ -84,9 +84,9 @@
       <list>
         <option value="$PROJECT_DIR$/unit_test.php" />
         <option value="$PROJECT_DIR$/initializeDatabase.php" />
-        <option value="$PROJECT_DIR$/parseShareValues.php" />
-        <option value="$PROJECT_DIR$/db_connection.php" />
         <option value="$PROJECT_DIR$/index.php" />
+        <option value="$PROJECT_DIR$/db_connection.php" />
+        <option value="$PROJECT_DIR$/parseShareValues.php" />
       </list>
     </option>
   </component>
@@ -301,9 +301,23 @@
         </state>
       </provider>
     </entry>
+    <entry file="file://$PROJECT_DIR$/index.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="67" column="40" selection-start="2262" selection-end="2262" vertical-scroll-proportion="-30.625" vertical-offset="270" max-vertical-offset="3405">
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/db_connection.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="25" column="42" selection-start="525" selection-end="525" vertical-scroll-proportion="-13.125" vertical-offset="0" max-vertical-offset="645">
+          <folding />
+        </state>
+      </provider>
+    </entry>
     <entry file="file://$PROJECT_DIR$/initializeDatabase.php">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="10" column="19" selection-start="204" selection-end="204" vertical-scroll-proportion="-6.25" vertical-offset="0" max-vertical-offset="255">
+        <state line="8" column="0" selection-start="95" selection-end="184" vertical-scroll-proportion="-5.0" vertical-offset="0" max-vertical-offset="255">
           <folding>
             <element signature="e#6#63#0" expanded="true" />
           </folding>
@@ -312,24 +326,10 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/parseShareValues.php">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="51" column="141" selection-start="1288" selection-end="1288" vertical-scroll-proportion="-17.958334" vertical-offset="334" max-vertical-offset="1185">
+        <state line="58" column="85" selection-start="1669" selection-end="1669" vertical-scroll-proportion="0.63064295" vertical-offset="409" max-vertical-offset="1185">
           <folding>
             <element signature="e#6#63#0" expanded="true" />
           </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/db_connection.php">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="32" column="16" selection-start="1004" selection-end="1004" vertical-scroll-proportion="-17.5" vertical-offset="0" max-vertical-offset="630">
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/index.php">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="67" column="40" selection-start="2262" selection-end="2262" vertical-scroll-proportion="0.68941504" vertical-offset="510" max-vertical-offset="3405">
-          <folding />
         </state>
       </provider>
     </entry>
