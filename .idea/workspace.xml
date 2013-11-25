@@ -23,15 +23,15 @@
   </component>
   <component name="FileEditorManager">
     <leaf>
-      <file leaf-file-name="index.php" pinned="false" current="false" current-in-tab="false">
+      <file leaf-file-name="index.php" pinned="false" current="true" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/index.php">
           <provider selected="true" editor-type-id="text-editor">
-            <state line="89" column="59" selection-start="2602" selection-end="2619" vertical-scroll-proportion="-12.5" vertical-offset="1035" max-vertical-offset="3525">
+            <state line="81" column="12" selection-start="2648" selection-end="2648" vertical-scroll-proportion="0.7938719" vertical-offset="645" max-vertical-offset="3720">
               <folding>
-                <marker date="1385330239000" expanded="true" signature="3192:3225" placeholder="..." />
-                <marker date="1385330239000" expanded="true" signature="3209:3225" placeholder="..." />
-                <marker date="1385330239000" expanded="true" signature="3267:3278" placeholder="..." />
-                <marker date="1385330239000" expanded="true" signature="3459:3537" placeholder="..." />
+                <marker date="1385391656000" expanded="true" signature="3554:3587" placeholder="..." />
+                <marker date="1385391656000" expanded="true" signature="3571:3587" placeholder="..." />
+                <marker date="1385391656000" expanded="true" signature="3629:3640" placeholder="..." />
+                <marker date="1385391656000" expanded="true" signature="3821:3899" placeholder="..." />
               </folding>
             </state>
           </provider>
@@ -46,10 +46,10 @@
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="parseShareValues.php" pinned="false" current="true" current-in-tab="true">
+      <file leaf-file-name="parseShareValues.php" pinned="false" current="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/parseShareValues.php">
           <provider selected="true" editor-type-id="text-editor">
-            <state line="58" column="85" selection-start="1669" selection-end="1669" vertical-scroll-proportion="0.56908345" vertical-offset="454" max-vertical-offset="1185">
+            <state line="45" column="59" selection-start="985" selection-end="1002" vertical-scroll-proportion="-9.208333" vertical-offset="454" max-vertical-offset="1185">
               <folding>
                 <element signature="e#6#63#0" expanded="true" />
               </folding>
@@ -261,10 +261,10 @@
       <provider selected="true" editor-type-id="text-editor">
         <state line="134" column="0" selection-start="2344" selection-end="2344" vertical-scroll-proportion="0.0" vertical-offset="2010" max-vertical-offset="2355">
           <folding>
-            <marker date="1385330239000" expanded="true" signature="3192:3225" placeholder="..." />
-            <marker date="1385330239000" expanded="true" signature="3209:3225" placeholder="..." />
-            <marker date="1385330239000" expanded="true" signature="3267:3278" placeholder="..." />
-            <marker date="1385330239000" expanded="true" signature="3459:3537" placeholder="..." />
+            <marker date="1385391656000" expanded="true" signature="3554:3587" placeholder="..." />
+            <marker date="1385391656000" expanded="true" signature="3571:3587" placeholder="..." />
+            <marker date="1385391656000" expanded="true" signature="3629:3640" placeholder="..." />
+            <marker date="1385391656000" expanded="true" signature="3821:3899" placeholder="..." />
           </folding>
         </state>
       </provider>
@@ -287,10 +287,10 @@
       <provider selected="true" editor-type-id="text-editor">
         <state line="119" column="135" selection-start="2417" selection-end="2417" vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="2567">
           <folding>
-            <marker date="1385330239000" expanded="true" signature="3192:3225" placeholder="..." />
-            <marker date="1385330239000" expanded="true" signature="3209:3225" placeholder="..." />
-            <marker date="1385330239000" expanded="true" signature="3267:3278" placeholder="..." />
-            <marker date="1385330239000" expanded="true" signature="3459:3537" placeholder="..." />
+            <marker date="1385391656000" expanded="true" signature="3554:3587" placeholder="..." />
+            <marker date="1385391656000" expanded="true" signature="3571:3587" placeholder="..." />
+            <marker date="1385391656000" expanded="true" signature="3629:3640" placeholder="..." />
+            <marker date="1385391656000" expanded="true" signature="3821:3899" placeholder="..." />
           </folding>
         </state>
       </provider>
@@ -332,23 +332,23 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/index.php">
+    <entry file="file://$PROJECT_DIR$/parseShareValues.php">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="89" column="59" selection-start="2602" selection-end="2619" vertical-scroll-proportion="-12.5" vertical-offset="1035" max-vertical-offset="3525">
+        <state line="45" column="59" selection-start="985" selection-end="1002" vertical-scroll-proportion="-9.208333" vertical-offset="454" max-vertical-offset="1185">
           <folding>
-            <marker date="1385330239000" expanded="true" signature="3192:3225" placeholder="..." />
-            <marker date="1385330239000" expanded="true" signature="3209:3225" placeholder="..." />
-            <marker date="1385330239000" expanded="true" signature="3267:3278" placeholder="..." />
-            <marker date="1385330239000" expanded="true" signature="3459:3537" placeholder="..." />
+            <element signature="e#6#63#0" expanded="true" />
           </folding>
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/parseShareValues.php">
+    <entry file="file://$PROJECT_DIR$/index.php">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="58" column="85" selection-start="1669" selection-end="1669" vertical-scroll-proportion="0.56908345" vertical-offset="454" max-vertical-offset="1185">
+        <state line="81" column="12" selection-start="2648" selection-end="2648" vertical-scroll-proportion="0.7938719" vertical-offset="645" max-vertical-offset="3720">
           <folding>
-            <element signature="e#6#63#0" expanded="true" />
+            <marker date="1385391656000" expanded="true" signature="3554:3587" placeholder="..." />
+            <marker date="1385391656000" expanded="true" signature="3571:3587" placeholder="..." />
+            <marker date="1385391656000" expanded="true" signature="3629:3640" placeholder="..." />
+            <marker date="1385391656000" expanded="true" signature="3821:3899" placeholder="..." />
           </folding>
         </state>
       </provider>

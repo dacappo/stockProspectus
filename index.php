@@ -60,21 +60,36 @@
 </div>
 
 <div class="container">
+    <div class="starter-template">
+        <h1>Twitter Based Stock Analysis</h1>
+        <p class="lead">Making use of current Twitter feeds, a general sentiment for each share can be measured.<br></p>
+    </div>
 
-        <div class="starter-template">
-            <h1>Twitter Based Stock Analysis</h1>
-            <p class="lead">Making use of current Twitter feeds, a general sentiment for each share can be measured.<br></p>
+    <div class="row">
+        <div class="col-md-3">
+
+            <h4>Indexes</h4>
+            <ul class="nav nav-pills nav-stacked">
+                <li class="active" ><a href="#dax">DAX</a></li>
+                <li><a href="#dow">Dow Jones</a></li>
+            </ul>
+
+            <h4>Lists</h4>
+            <ul class="nav nav-pills nav-stacked">
+                <li class="" ><a href="#up">Tending Upwards</a></li>
+                <li><a href="#down">Tending Downwards</a></li>
+            </ul>
+            
+
         </div>
-        <div class="row">
-        <div class="col-md-12">
+        <div class="col-md-9">
+            <div class="panel panel-default">
+                <!-- Default panel contents -->
+                <div class="panel-heading">DAX</div>
 
-<div class="panel panel-default">
-    <!-- Default panel contents -->
-    <div class="panel-heading">DAX</div>
-
-    <!-- Table -->
-    <table class="table">
-        <tr><th>Name</th><th>ISIN</th><th>Value</th></tr>
+                <!-- Table -->
+                <table class="table">
+                    <tr><th>Name</th><th>ISIN</th><th>Value</th></tr>
 
 <?php
 
@@ -88,9 +103,7 @@ $Values = array();
 
 
 $con = connectToDB("localhost","dacappa","veryoftirjoicTeg3","dacappa_stockProspectus");
-//$query = "SELECT Shares.Name, Shares.ISIN, ShareValues.Value, ShareValues.Timestamp FROM Shares, ShareValues WHERE Shares.ISIN = ShareValues.ISIN ORDER BY ShareValues.Timestamp DESC LIMIT 30";
-
-$query = "SELECT * FROM (SELECT Shares.Name, Shares.ISIN, ShareValues.Value, ShareValues.Timestamp FROM Shares, ShareValues WHERE Shares.ISIN = ShareValues.ISIN ORDER BY ShareValues.Timestamp DESC LIMIT 30) AS test ORDER BY Name";
+$query = "SELECT * FROM (SELECT Shares.Name, Shares.ISIN, ShareValues.Value, ShareValues.Timestamp FROM Shares, ShareValues WHERE Shares.ISIN = ShareValues.ISIN ORDER BY ShareValues.Timestamp DESC LIMIT 30) AS result ORDER BY Name";
 
 
 $result = mysqli_query($con,$query);
