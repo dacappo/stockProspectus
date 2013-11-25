@@ -199,44 +199,7 @@ while($row = mysqli_fetch_array($result)){
 <table>
 	<tr><th>Name</th><th>ISIN</th><th>Value</th></tr>
 
-<?php /*
 
-// Include the library
-include('db_connection.php');
-
-// Attributes
-$ISINs = array();
-$Names = array();
-$Values = array();
-
-
-$con = connectToDB("localhost","dacappa","veryoftirjoicTeg3","dacappa_stockProspectus");
-$query = "SELECT Shares.Name, Shares.ISIN, ShareValues.Value, ShareValues.Timestamp FROM Shares, ShareValues WHERE Shares.ISIN = ShareValues.ISIN ORDER BY ShareValues.Timestamp DESC LIMIT 30";
-
-$result = mysqli_query($con,$query);
-mysqli_close($con);
-
-while($row = mysqli_fetch_array($result)){
-    echo '<tr>';
-    echo '<td>';
-    echo $row['Name'];
-    echo '</td>';
-    echo '<td>';
-    echo $row['ISIN'];
-    echo '</td>';
-    echo '<td class="price">';
-    echo $row['Value'] . "&euro;";
-    echo '</td>';
-    echo '</tr>';
-}
-
-
-
-?>
-</table>
-
-</body>
-</html>
 
 
 
