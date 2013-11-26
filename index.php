@@ -79,7 +79,7 @@
                 <li class="" ><a href="#up">Tending Upwards</a></li>
                 <li><a href="#down">Tending Downwards</a></li>
             </ul>
-            
+
 
         </div>
         <div class="col-md-9">
