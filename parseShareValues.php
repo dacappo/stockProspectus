@@ -1732,7 +1732,6 @@ class simple_html_dom
 
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-include('db_connection.php');
 
 function connectToDB($server, $user, $password, $database) {
     // Create connection
@@ -1788,7 +1787,6 @@ $end = microtime(true);
 for($i = 0; $i < sizeof($ISINs) && $i < sizeof($Names) && $i < sizeof($Values); $i++) {
     $queryForShare = "INSERT INTO Shares VALUES ('" . substr($ISINs[$i],0,12) . "', '" . $Names[$i] . "') ON DUPLICATE KEY UPDATE ISIN = ISIN";
     $queryForValue ="INSERT INTO ShareValues VALUES ('" . substr($ISINs[$i],0,12) . "', CURRENT_TIMESTAMP, " . str_replace(",",".",$Values[$i]) . ")";
-    echo $query;
 
     if (mysqli_query($con,$queryForShare)){
         echo "Query ran successfully: " . $queryForShare . "<br>";
