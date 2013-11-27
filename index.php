@@ -109,7 +109,10 @@ $query = "SELECT * FROM (SELECT Shares.Name, Shares.ISIN, ShareValues.Value, Sha
 $result = mysqli_query($con,$query);
 mysqli_close($con);
 
+$timeStamp = "Something went wrong!";
+
 while($row = mysqli_fetch_array($result)){
+    $timeStamp = $row['Timestamp'];
     echo '<tr>';
     echo '<td>';
     echo $row['Name'];
@@ -122,12 +125,16 @@ while($row = mysqli_fetch_array($result)){
     echo '</td>';
     echo '</tr>';
 }
-?>
 
-    </table>
-</div>
-</div>
-</div>
+echo '</table>';
+echo '</div></div></div>';
+
+
+echo '<div class="col-md-9 col-md-offset-3">';
+echo '<div class="alert alert-success">Share values dated from '. $timeStamp . '.</div>';
+echo '</div>'
+
+?>
 
 <!-- Bootstrap core JavaScript
 ================================================== -->
