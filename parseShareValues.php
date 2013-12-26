@@ -1745,7 +1745,7 @@ function connectToDB($server, $user, $password, $database) {
     return $con;
 }
 
-////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+// Parse DAX Values //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 // Attributes
 $ISINs = array();
@@ -1777,16 +1777,22 @@ foreach($html->find('div.double_row_performance') as $e) {
 
 }
 
-// Write to DB
+// Write DAX to DB
 
 $con = connectToDB("localhost","dacappa","veryoftirjoicTeg3","dacappa_stockProspectus");
 
-$end = microtime(true);
+
 
 
 for($i = 0; $i < sizeof($ISINs) && $i < sizeof($Names) && $i < sizeof($Values); $i++) {
-    $queryForShare = "INSERT INTO Shares VALUES ('" . substr($ISINs[$i],0,12) . "', '" . $Names[$i] . "') ON DUPLICATE KEY UPDATE ISIN = ISIN";
-    $queryForValue ="INSERT INTO ShareValues VALUES ('" . substr($ISINs[$i],0,12) . "', CURRENT_TIMESTAMP, " . str_replace(",",".",$Values[$i]) . ")";
+    //$queryForShare = "INSERT INTO Shares(ISIN, Name, Currency) VALUES ('" . substr($ISINs[$i],0,12) . "', '" . $Names[$i] . "','&euro;') ON DUPLICATE KEY UPDATE ISIN = ISIN";
+    $queryForShare = sprintf("INSERT INTO Shares(ISIN, Name, Currency, StockIndex) VALUES ('%s', '%s','€','DAX') ON DUPLICATE KEY UPDATE ISIN = ISIN",
+        mysql_real_escape_string(substr($ISINs[$i],0,12)),
+        mysql_real_escape_string($Names[$i]));
+
+    //$queryForValue ="INSERT INTO ShareValues VALUES ('" . substr($ISINs[$i],0,12) . "', CURRENT_TIMESTAMP, " . str_replace(",",".",$Values[$i]) . ")";
+    $queryForValue= sprintf("INSERT INTO ShareValues VALUES ('%s', CURRENT_TIMESTAMP, " . str_replace(',','.', $Values[$i]) . ")",
+        mysql_real_escape_string(substr($ISINs[$i],0,12)));
 
     if (mysqli_query($con,$queryForShare)){
         echo "Query ran successfully: " . $queryForShare . "<br>";
@@ -1802,6 +1808,72 @@ for($i = 0; $i < sizeof($ISINs) && $i < sizeof($Names) && $i < sizeof($Values); 
 }
 
 mysqli_close($con);
+
+
+// Parse Dow Jones Values //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+// Attributes
+$ISINs = array();
+$Names = array();
+$Values = array();
+
+// Retrieve the DOM from a given URL
+$html = file_get_html('http://www.finanzen.net/index/Dow_Jones');
+
+foreach($html->find('div.double_row_performance') as $e) {
+
+    foreach($e->find('tr') as $tr) {
+        $aktie = $tr->find('td');
+        if (sizeof($aktie) > 0) {
+            $num = explode("\n",$aktie[0]->plaintext);
+            array_push($ISINs, $num[1]);
+
+            if (substr($num[0],-2,1) == "N") {
+                array_push($Names, htmlspecialchars(substr($num[0],0,strlen($num[0])-3)));
+            } else {
+                array_push($Names, htmlspecialchars($num[0]));
+            }
+
+            $num = explode("\n",$aktie[1]->plaintext);
+            array_push($Values, $num[0]);
+
+        }
+    }
+
+}
+
+// Write DAX to DB
+
+$con = connectToDB("localhost","dacappa","veryoftirjoicTeg3","dacappa_stockProspectus");
+
+
+
+
+for($i = 0; $i < sizeof($ISINs) && $i < sizeof($Names) && $i < sizeof($Values); $i++) {
+
+    $queryForShare = sprintf("INSERT INTO Shares(ISIN, Name, Currency, StockIndex) VALUES ('%s', '%s','$','DJ') ON DUPLICATE KEY UPDATE ISIN = ISIN",
+        mysql_real_escape_string(substr($ISINs[$i],0,12)),
+        mysql_real_escape_string($Names[$i]));
+
+    $queryForValue = sprintf("INSERT INTO ShareValues VALUES ('%s', CURRENT_TIMESTAMP, " . str_replace(',','.', $Values[$i]) . ")",
+        mysql_real_escape_string(substr($ISINs[$i],0,12)));
+
+    if (mysqli_query($con,$queryForShare)){
+        echo "Query ran successfully: " . $queryForShare . "<br>";
+    } else {
+        echo "Error running query: " . mysqli_error($con) . " : " . $queryForShare . "<br>";
+    }
+
+    if (mysqli_query($con,$queryForValue)){
+        echo "Query ran successfully: " . $queryForValue . "<br>";
+    } else {
+        echo "Error running query: " . mysqli_error($con) . " : " . $queryForValue . "<br>";
+    }
+}
+
+mysqli_close($con);
+
+$end = microtime(true);
 
 $laufzeit = $end - $start;
 echo "<div style='background-color:black; color:white;' >Runtime: ".$laufzeit." seconds!</div>";

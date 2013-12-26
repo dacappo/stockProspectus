@@ -27,7 +27,6 @@
 
     </style>
 
-
     <!-- HTML5 shim and Respond.js IE8 support of HTML5 elements and media queries -->
     <!--[if lt IE 9]>
     <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
@@ -55,6 +54,7 @@
                 <li><a href="#about">About</a></li>
                 <li><a href="#contact">Contact</a></li>
             </ul>
+
         </div><!--/.nav-collapse -->
     </div>
 </div>
@@ -66,145 +66,109 @@
     </div>
 
     <div class="row">
-        <div class="col-md-3">
+        <div class="my_navigation col-md-3">
 
             <h4>Indexes</h4>
             <ul class="nav nav-pills nav-stacked">
-                <li class="active" ><a href="#dax">DAX</a></li>
-                <li><a href="#dow">Dow Jones</a></li>
+                <li class="active" ><a onclick="updateIndex('dax')">DAX</a></li>
+                <li><a onclick="updateIndex('dj')" >Dow Jones</a></li>
             </ul>
 
             <h4>Lists</h4>
             <ul class="nav nav-pills nav-stacked">
-                <li class="" ><a href="#up">Tending Upwards</a></li>
-                <li><a href="#down">Tending Downwards</a></li>
+                <li><a href="#up">Tending Upwards</a></li>
+                <li><a href="#down" >Tending Downwards</a></li>
             </ul>
-
 
         </div>
         <div class="col-md-9">
-            <div class="panel panel-default">
-                <!-- Default panel contents -->
-                <div class="panel-heading">DAX</div>
-
-                <!-- Table -->
-                <table class="table">
-                    <tr><th>Name</th><th>ISIN</th><th>Value</th></tr>
-
-<?php
-
-// Include the library
-include('db_connection.php');
-
-// Attributes
-$ISINs = array();
-$Names = array();
-$Values = array();
+            <div id="main_panel" class="panel panel-default">
 
 
-$con = connectToDB("localhost","dacappa","veryoftirjoicTeg3","dacappa_stockProspectus");
-$query = "SELECT * FROM (SELECT Shares.Name, Shares.ISIN, ShareValues.Value, ShareValues.Timestamp FROM Shares, ShareValues WHERE Shares.ISIN = ShareValues.ISIN ORDER BY ShareValues.Timestamp DESC LIMIT 30) AS result ORDER BY Name";
-
-
-$result = mysqli_query($con,$query);
-mysqli_close($con);
-
-$timeStamp = "Something went wrong!";
-
-while($row = mysqli_fetch_array($result)){
-    $timeStamp = $row['Timestamp'];
-    echo '<tr>';
-    echo '<td>';
-    echo $row['Name'];
-    echo '</td>';
-    echo '<td>';
-    echo $row['ISIN'];
-    echo '</td>';
-    echo '<td class="price">';
-    echo $row['Value'] . "&euro;";
-    echo '</td>';
-    echo '</tr>';
-}
-
-echo '</table>';
-echo '</div></div></div>';
-
-
-echo '<div class="col-md-9 col-md-offset-3">';
-echo '<div class="alert alert-success">Share values dated from '. $timeStamp . '.</div>';
-echo '</div>'
-
-?>
+            </div>
+        </div>
+    </div>
 
 <!-- Bootstrap core JavaScript
 ================================================== -->
 <!-- Placed at the end of the document so the pages load faster -->
 <script src="https://code.jquery.com/jquery-1.10.2.min.js"></script>
+<script src="//ajax.googleapis.com/ajax/libs/jqueryui/1.10.3/jquery-ui.min.js"></script>
 <script src="js/bootstrap.min.js"></script>
+
+<script>
+
+    function initializeIndex() {
+
+        window.location.hash = '#'+ 'dax';
+        getIndex();
+
+    }
+
+
+    function updateIndex(index) {
+
+        window.location.hash = '#'+ index;
+
+        $('#main_panel').toggle("fade","slow",function() {getIndex()});
+
+        $('#main_panel').toggle("fade","slow");
+    }
+
+    function getIndex() {
+
+        var panel = document.getElementById('main_panel');
+
+        var request = $.ajax({
+            type: "POST",
+            url: "ajax/getShareValues.php?index=" + location.hash.slice(1),
+            dataType: "json"
+        });
+
+        panel.innerHTML = '<!-- Default panel contents --><div id="time_of_update" class="panel-heading"></div><!-- Table --><table id="share-table" class="table"><tr><th>Name</th><th>ISIN</th><th>Value</th></tr></table>';
+
+        request.done(function( json ) {
+            json.shares.forEach(function(share) {
+                var record = document.createElement('tr');
+                var record_name = document.createElement('td');
+                var record_isin = document.createElement('td');
+                var record_value = document.createElement('td');
+                record_value.setAttribute('class', 'price');
+
+                record_name.innerText = share.Name;
+                record_isin.innerText = share.ISIN;
+                record_value.innerText = share.Value + share.Currency;
+
+                record.appendChild(record_name);
+                record.appendChild(record_isin);
+                record.appendChild(record_value);
+
+                document.getElementById('share-table').children[0].appendChild(record);
+            });
+
+            document.getElementById('time_of_update').innerHTML = 'Timestamp: ' + json.Timestamp;
+        });
+
+    }
+
+    initializeIndex();
+
+
+    // Setting navigation event handlers
+    $('.my_navigation li').click(function(e) {
+        $('.my_navigation li.active').removeClass('active');
+        var $this = $(this);
+        if (!$this.hasClass('active')) {
+            $this.addClass('active');
+        }
+        e.preventDefault();
+    });
+
+</script>
+
+
 </body>
 </html>
-
-
-<!--
-<!DOCTYPE html>
-<html>
-<head>
-	<title>Aktienindex</title>
-	<style type=text/css>
-		html {
-			color: #6678b1;
-			font-family: Segoe UI Light, Verdana;
-		}
-		
-		table {
-			width:100%;
-			
-			font-weight: 300;
-			text-align:left;
-			margin-bottom: 30px;
-		}
-		
-		tr:hover {
-			background-color:#f2f8ff;
-		}
-		
-		th:hover {
-			background-color:#ffffff;
-		}
-		
-		th {
-			padding: 5px;
-			color: #6678b1;
-			border-bottom: 2px solid #6678b1;
-			font-weight: 300;
-		}
-		
-		td {
-			font-size: 14px;
-			padding: 5px;
-			border-bottom: 1px solid #DDDDDD;
-		}
-		
-		td.price {
-			text-align: right;
-		}
-		
-		.statistic {
-			position: fixed;
-			bottom: 0px;
-			right: 0px;
-			left: 0px;
-			font-size:12px;
-			color:#FFFFFF;
-			background-color: #6678b1;
-			padding: 5px;
-		}
-	</style>
-
-</head>
-<body>
-<table>
-	<tr><th>Name</th><th>ISIN</th><th>Value</th></tr>
 
 
 
