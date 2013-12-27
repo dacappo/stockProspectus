@@ -21,9 +21,9 @@ $Values = array();
 
 $con = connectToDB("localhost","dacappa","veryoftirjoicTeg3","dacappa_stockProspectus");
 if ($index == "dax") {
-    $query = "SELECT * FROM (SELECT Shares.Name, Shares.ISIN, ShareValues.Value, ShareValues.Timestamp, Shares.Currency FROM Shares, ShareValues WHERE Shares.ISIN = ShareValues.ISIN AND Shares.StockIndex = 'DAX' ORDER BY ShareValues.Timestamp DESC LIMIT 30) AS result ORDER BY Name";
+    $query = "SELECT * FROM (SELECT Shares.Name, Shares.ISIN, ShareValues.Value, ShareValues.SpreadH, ShareValues.SpreadD, ShareValues.SpreadW, ShareValues.Timestamp, Shares.Currency FROM Shares, ShareValues WHERE Shares.ISIN = ShareValues.ISIN AND Shares.StockIndex = 'DAX' ORDER BY ShareValues.Timestamp DESC LIMIT 30) AS result ORDER BY Name";
 } else if ($index == "dj") {
-    $query = "SELECT * FROM (SELECT Shares.Name, Shares.ISIN, ShareValues.Value, ShareValues.Timestamp, Shares.Currency FROM Shares, ShareValues WHERE Shares.ISIN = ShareValues.ISIN AND Shares.StockIndex = 'DJ' ORDER BY ShareValues.Timestamp DESC LIMIT 30) AS result ORDER BY Name";
+    $query = "SELECT * FROM (SELECT Shares.Name, Shares.ISIN, ShareValues.Value, ShareValues.SpreadH, ShareValues.SpreadD, ShareValues.SpreadW, ShareValues.Timestamp, Shares.Currency FROM Shares, ShareValues WHERE Shares.ISIN = ShareValues.ISIN AND Shares.StockIndex = 'DJ' ORDER BY ShareValues.Timestamp DESC LIMIT 30) AS result ORDER BY Name";
 } else {
 
 }
@@ -38,7 +38,7 @@ $dataForJson = array();
 
 while($row = mysqli_fetch_array($result)){
     $timeStamp = $row['Timestamp'];
-    $share = array("Name"=>str_replace('&amp;','&',$row['Name']), "ISIN"=>$row['ISIN'], "Value"=>$row['Value'], "Currency"=>$row['Currency']);
+    $share = array("Name"=>str_replace('&amp;','&',$row['Name']), "ISIN"=>$row['ISIN'], "Value"=>$row['Value'], "Currency"=>$row['Currency'], "SpreadH"=>$row['SpreadH'], "SpreadD"=>$row['SpreadD'], "SpreadW"=>$row['SpreadW']);
     array_push($dataForJson, $share);
 }
 

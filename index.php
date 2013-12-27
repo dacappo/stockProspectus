@@ -127,7 +127,7 @@
             dataType: "json"
         });
 
-        panel.innerHTML = '<!-- Default panel contents --><div id="time_of_update" class="panel-heading"></div><!-- Table --><table id="share-table" class="table"><tr><th>Name</th><th>ISIN</th><th>Value</th></tr></table>';
+        panel.innerHTML = '<!-- Default panel contents --><div id="time_of_update" class="panel-heading"></div><!-- Table --><table id="share-table" class="table"><tr><th>Name</th><th>Value</th><th>Hourly Spread</th><th>Daily Spread</th><th>Weekly Spread</th></tr></table>';
 
         request.done(function( json ) {
             json.shares.forEach(function(share) {
@@ -135,15 +135,42 @@
                 var record_name = document.createElement('td');
                 var record_isin = document.createElement('td');
                 var record_value = document.createElement('td');
+                var record_spreadH = document.createElement('td');
+                var record_spreadD = document.createElement('td');
+                var record_spreadW = document.createElement('td');
                 record_value.setAttribute('class', 'price');
+                record_spreadH.setAttribute('class', 'price');
+                record_spreadD.setAttribute('class', 'price');
+                record_spreadW.setAttribute('class', 'price');
 
                 record_name.innerText = share.Name;
                 record_isin.innerText = share.ISIN;
                 record_value.innerText = share.Value + share.Currency;
 
+                if (share.SpreadH != share.Value) {
+                    record_spreadH.innerText =share.SpreadH + share.Currency;
+                } else {
+                    record_spreadH.innerText = "-";
+                }
+
+                if (share.SpreadD != share.Value) {
+                    record_spreadD.innerText =share.SpreadD + share.Currency;
+                } else {
+                    record_spreadD.innerText = "-";
+                }
+
+                if (share.SpreadW != share.Value) {
+                    record_spreadW.innerText = share.SpreadW + share.Currency;
+                } else {
+                    record_spreadW.innerText = "-";
+                }
+
                 record.appendChild(record_name);
-                record.appendChild(record_isin);
+                //record.appendChild(record_isin);
                 record.appendChild(record_value);
+                record.appendChild(record_spreadH);
+                record.appendChild(record_spreadD);
+                record.appendChild(record_spreadW);
 
                 document.getElementById('share-table').children[0].appendChild(record);
             });

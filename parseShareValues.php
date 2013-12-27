@@ -1732,6 +1732,10 @@ class simple_html_dom
 
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+//style
+echo "<style>body{font-family: Verdana, Geneva, sans-serif; font-size: 12px;} span{font-size: 9px;} </style>";
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
 
 function connectToDatabase($server, $user, $password, $database) {
 
@@ -1782,34 +1786,72 @@ foreach($html->find('div.double_row_performance') as $e) {
 
 $dbh = connectToDatabase("localhost","dacappa","veryoftirjoicTeg3","dacappa_stockProspectus");
 
-$stmt1 = $dbh->prepare("INSERT INTO Shares(ISIN, Name, Currency, StockIndex) VALUES (:i, :n,'€','DAX') ON DUPLICATE KEY UPDATE ISIN = ISIN");
-$stmt2 = $dbh->prepare('INSERT INTO ShareValues VALUES (:i, CURRENT_TIMESTAMP, :v)');
+$stmt0 = $dbh->prepare("SELECT ShareValues.Value FROM ShareValues WHERE ShareValues.ISIN = :i ORDER BY ShareValues.Timestamp DESC LIMIT 1 OFFSET :off");
+$stmt1 = $dbh->prepare("INSERT INTO Shares(ISIN, Name, Currency, StockIndex) VALUES (:i, :n,:currency, :index) ON DUPLICATE KEY UPDATE ISIN = ISIN");
+$stmt2 = $dbh->prepare('INSERT INTO ShareValues VALUES (:i, CURRENT_TIMESTAMP, :v, :sh, :sd, :sw)');
 
+$stmt0->bindParam(':i', $isin);
+$stmt0->bindParam(':off', $offset);
 $stmt1->bindParam(':i', $isin);
 $stmt1->bindParam(':n', $name);
+$stmt1->bindParam(':currency', $currency);
+$stmt1->bindParam(':index', $index);
 $stmt2->bindParam(':i', $isin);
 $stmt2->bindParam(':v', $value);
+$stmt2->bindParam(':sh', $spreadh);
+$stmt2->bindParam(':sd', $spreadd);
+$stmt2->bindParam(':sw', $spreadw);
+
+
+$currency = '€';
+$index = 'DAX';
 
 for($i = 0; $i < sizeof($ISINs) && $i < sizeof($Names) && $i < sizeof($Values); $i++) {
 
     $isin = substr($ISINs[$i],0,12);
-    $name = str_replace("'"," ",$Names[$i]);
+    $name = $Names[$i];
     $value = str_replace(",",".",$Values[$i]);
 
-    if ($stmt1->execute()){
-        echo "Query ran successfully: " . $stmt1->queryString . "<br>";
+    $offset = 0;
+    if ($stmt0->execute()){
+        $spreadh = $value - array_pop($stmt0->fetch());
+        echo "Query ran successfully: <span>" . $stmt0->queryString . "</span><br>";
     } else {
-        echo "Error running query: " . $stmt1->errorInfo() . " : " . $stmt1->queryString . "<br>";
+        $spreadh = 0;
+        echo "Error running query: " . array_pop($stmt0->errorInfo()) . " : <span>" . $stmt0->queryString . "</span><br>";
+    }
+
+    $offset = 24;
+    if ($stmt0->execute()){
+        $spreadd = $value - array_pop($stmt0->fetch());
+        echo "Query ran successfully: <span>" . $stmt0->queryString . "</span><br>";
+    } else {
+        $spreadd = 0;
+        echo "Error running query: " . array_pop($stmt0->errorInfo()) . " : <span>" . $stmt0->queryString . "</span><br>";
+    }
+
+    $offset = 168;
+    if ($stmt0->execute()){
+        $spreadw = $value - array_pop($stmt0->fetch());
+        echo "Query ran successfully: <span>" . $stmt0->queryString . "</span><br>";
+    } else {
+        $spreadw = 0;
+        echo "Error running query: " . array_pop($stmt0->errorInfo()) . " : <span>" . $stmt0->queryString . "</span><br>";
+    }
+
+    if ($stmt1->execute()){
+        echo "Query ran successfully: <span>" . $stmt1->queryString . "</span><br>";
+    } else {
+        echo "Error running query: " . array_pop($stmt1->errorInfo()) . " : <span>" . $stmt1->queryString . "</span><br>";
     }
 
     if ($stmt2->execute()){
-        echo "Query ran successfully: " . $stmt2->queryString . "<br>";
+        echo "Query ran successfully: <span>" . $stmt2->queryString . "</span><br>";
     } else {
-        echo "Error running query: " . $stmt2->errorInfo() . " : " . $stmt2->queryString . "<br>";
+        echo "Error running query: " . array_pop($stmt2->errorInfo()) . " : <span>" . $stmt2->queryString . "</span><br>";
     }
 }
 
-$dbh = null;
 
 // Parse Dow Jones Values //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
@@ -1845,33 +1887,53 @@ foreach($html->find('div.double_row_performance') as $e) {
 
 // Write Dow Jones to DB
 
-$dbh = connectToDatabase("localhost","dacappa","veryoftirjoicTeg3","dacappa_stockProspectus");
+$currency = '$';
+$index = 'DJ';
 
-$stmt1 = $dbh->prepare("INSERT INTO Shares(ISIN, Name, Currency, StockIndex) VALUES (:i, :n,'$','DJ') ON DUPLICATE KEY UPDATE ISIN = ISIN");
-$stmt2 = $dbh->prepare('INSERT INTO ShareValues VALUES (:i, CURRENT_TIMESTAMP, :v)');
-
-$stmt1->bindParam(':i', $isin);
-$stmt1->bindParam(':n', $name);
-$stmt2->bindParam(':i', $isin);
-$stmt2->bindParam(':v', $value);
 
 for($i = 0; $i < sizeof($ISINs) && $i < sizeof($Names) && $i < sizeof($Values); $i++) {
 
     $isin = substr($ISINs[$i],0,12);
-    //$name = str_replace("'"," ",$Names[$i]);
     $name = $Names[$i];
     $value = str_replace(",",".",$Values[$i]);
 
-    if ($stmt1->execute()){
-        echo "Query ran successfully: " . $stmt1->queryString . "<br>";
+    $offset = 0;
+    if ($stmt0->execute()){
+        $spreadh = $value - array_pop($stmt0->fetch());
+        echo "Query ran successfully: <span>" . $stmt0->queryString . "</span><br>";
     } else {
-        echo "Error running query: " . $stmt1->errorInfo() . " : " . $stmt1->queryString . "<br>";
+        $spreadh = 0;
+        echo "Error running query: " . array_pop($stmt0->errorInfo()) . " : <span>" . $stmt0->queryString . "</span><br>";
+    }
+
+    $offset = 24;
+    if ($stmt0->execute()){
+        $spreadd = $value - array_pop($stmt0->fetch());
+        echo "Query ran successfully: <span>" . $stmt0->queryString . "</span><br>";
+    } else {
+        $spreadd = 0;
+        echo "Error running query: " . array_pop($stmt0->errorInfo()) . " : <span>" . $stmt0->queryString . "</span><br>";
+    }
+
+    $offset = 168;
+    if ($stmt0->execute()){
+        $spreadw = $value - array_pop($stmt0->fetch());
+        echo "Query ran successfully: <span>" . $stmt0->queryString . "</span><br>";
+    } else {
+        $spreadw = 0;
+        echo "Error running query: " . array_pop($stmt0->errorInfo()) . " : <span>" . $stmt0->queryString . "</span><br>";
+    }
+
+    if ($stmt1->execute()){
+        echo "Query ran successfully: <span>" . $stmt1->queryString . "</span><br>";
+    } else {
+        echo "Error running query: " . array_pop($stmt1->errorInfo()) . " : <span>" . $stmt1->queryString . "</span><br>";
     }
 
     if ($stmt2->execute()){
-        echo "Query ran successfully: " . $stmt2->queryString . "<br>";
+        echo "Query ran successfully: <span>" . $stmt2->queryString . "</span><br>";
     } else {
-        echo "Error running query: " . $stmt2->errorInfo() . " : " . $stmt2->queryString . "<br>";
+        echo "Error running query: " . array_pop($stmt2->errorInfo()) . " : <span>" . $stmt2->queryString . "</span><br>";
     }
 }
 
