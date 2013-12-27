@@ -9,7 +9,7 @@
 header('Content-Type: application/json');
 
 // Include the library
-include('../db_connection.php');
+include('../databaseConnection.php');
 
 $index = $_GET["index"];
 

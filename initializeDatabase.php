@@ -5,7 +5,7 @@
  * Time: 13:31
  */
 
-include("db_connection.php");
+include("databaseConnection.php");
 
 $dbh = connectToDatabase("localhost","dacappa","veryoftirjoicTeg3","dacappa_stockProspectus");
 
