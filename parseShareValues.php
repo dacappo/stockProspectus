@@ -1733,16 +1733,17 @@ class simple_html_dom
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-function connectToDB($server, $user, $password, $database) {
-    // Create connection
-    $con=mysqli_connect($server, $user, $password,$database);
+function connectToDatabase($server, $user, $password, $database) {
 
-    // Check connection
-    if (mysqli_connect_errno($con)) {
-        echo "Failed to connect to MySQL: " . mysqli_connect_error() . "<br>";
+    $dsn = 'mysql:dbname=' . $database . ';host=' . $server;
+
+    try {
+        $dbh = new PDO($dsn, $user, $password);
+    } catch (PDOException $e) {
+        echo 'Connection failed: ' . $e->getMessage();
+        $dbh = false;
     }
-
-    return $con;
+    return $dbh;
 }
 
 // Parse DAX Values //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -1779,36 +1780,36 @@ foreach($html->find('div.double_row_performance') as $e) {
 
 // Write DAX to DB
 
-$con = connectToDB("localhost","dacappa","veryoftirjoicTeg3","dacappa_stockProspectus");
+$dbh = connectToDatabase("localhost","dacappa","veryoftirjoicTeg3","dacappa_stockProspectus");
 
+$stmt1 = $dbh->prepare("INSERT INTO Shares(ISIN, Name, Currency, StockIndex) VALUES (:i, :n,'€','DAX') ON DUPLICATE KEY UPDATE ISIN = ISIN");
+$stmt2 = $dbh->prepare('INSERT INTO ShareValues VALUES (:i, CURRENT_TIMESTAMP, :v)');
 
-
+$stmt1->bindParam(':i', $isin);
+$stmt1->bindParam(':n', $name);
+$stmt2->bindParam(':i', $isin);
+$stmt2->bindParam(':v', $value);
 
 for($i = 0; $i < sizeof($ISINs) && $i < sizeof($Names) && $i < sizeof($Values); $i++) {
-    //$queryForShare = "INSERT INTO Shares(ISIN, Name, Currency) VALUES ('" . substr($ISINs[$i],0,12) . "', '" . $Names[$i] . "','&euro;') ON DUPLICATE KEY UPDATE ISIN = ISIN";
-    $queryForShare = sprintf("INSERT INTO Shares(ISIN, Name, Currency, StockIndex) VALUES ('%s', '%s','€','DAX') ON DUPLICATE KEY UPDATE ISIN = ISIN",
-        mysql_real_escape_string(substr($ISINs[$i],0,12)),
-        mysql_real_escape_string($Names[$i]));
 
-    //$queryForValue ="INSERT INTO ShareValues VALUES ('" . substr($ISINs[$i],0,12) . "', CURRENT_TIMESTAMP, " . str_replace(",",".",$Values[$i]) . ")";
-    $queryForValue= sprintf("INSERT INTO ShareValues VALUES ('%s', CURRENT_TIMESTAMP, " . str_replace(',','.', $Values[$i]) . ")",
-        mysql_real_escape_string(substr($ISINs[$i],0,12)));
+    $isin = substr($ISINs[$i],0,12);
+    $name = str_replace("'"," ",$Names[$i]);
+    $value = str_replace(",",".",$Values[$i]);
 
-    if (mysqli_query($con,$queryForShare)){
-        echo "Query ran successfully: " . $queryForShare . "<br>";
+    if ($stmt1->execute()){
+        echo "Query ran successfully: " . $stmt1->queryString . "<br>";
     } else {
-        echo "Error running query: " . mysqli_error($con) . " : " . $queryForValue . "<br>";
+        echo "Error running query: " . $stmt1->errorInfo() . " : " . $stmt1->queryString . "<br>";
     }
 
-    if (mysqli_query($con,$queryForValue)){
-        echo "Query ran successfully: " . $queryForValue . "<br>";
+    if ($stmt2->execute()){
+        echo "Query ran successfully: " . $stmt2->queryString . "<br>";
     } else {
-        echo "Error running query: " . mysqli_error($con) . " : " . $queryForValue . "<br>";
+        echo "Error running query: " . $stmt2->errorInfo() . " : " . $stmt2->queryString . "<br>";
     }
 }
 
-mysqli_close($con);
-
+$dbh = null;
 
 // Parse Dow Jones Values //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
@@ -1842,37 +1843,42 @@ foreach($html->find('div.double_row_performance') as $e) {
 
 }
 
-// Write DAX to DB
+// Write Dow Jones to DB
 
-$con = connectToDB("localhost","dacappa","veryoftirjoicTeg3","dacappa_stockProspectus");
+$dbh = connectToDatabase("localhost","dacappa","veryoftirjoicTeg3","dacappa_stockProspectus");
 
+$stmt1 = $dbh->prepare("INSERT INTO Shares(ISIN, Name, Currency, StockIndex) VALUES (:i, :n,'$','DJ') ON DUPLICATE KEY UPDATE ISIN = ISIN");
+$stmt2 = $dbh->prepare('INSERT INTO ShareValues VALUES (:i, CURRENT_TIMESTAMP, :v)');
 
-
+$stmt1->bindParam(':i', $isin);
+$stmt1->bindParam(':n', $name);
+$stmt2->bindParam(':i', $isin);
+$stmt2->bindParam(':v', $value);
 
 for($i = 0; $i < sizeof($ISINs) && $i < sizeof($Names) && $i < sizeof($Values); $i++) {
 
-    $queryForShare = sprintf("INSERT INTO Shares(ISIN, Name, Currency, StockIndex) VALUES ('%s', '%s','$','DJ') ON DUPLICATE KEY UPDATE ISIN = ISIN",
-        mysql_real_escape_string(substr($ISINs[$i],0,12)),
-        mysql_real_escape_string($Names[$i]));
+    $isin = substr($ISINs[$i],0,12);
+    //$name = str_replace("'"," ",$Names[$i]);
+    $name = $Names[$i];
+    $value = str_replace(",",".",$Values[$i]);
 
-    $queryForValue = sprintf("INSERT INTO ShareValues VALUES ('%s', CURRENT_TIMESTAMP, " . str_replace(',','.', $Values[$i]) . ")",
-        mysql_real_escape_string(substr($ISINs[$i],0,12)));
-
-    if (mysqli_query($con,$queryForShare)){
-        echo "Query ran successfully: " . $queryForShare . "<br>";
+    if ($stmt1->execute()){
+        echo "Query ran successfully: " . $stmt1->queryString . "<br>";
     } else {
-        echo "Error running query: " . mysqli_error($con) . " : " . $queryForShare . "<br>";
+        echo "Error running query: " . $stmt1->errorInfo() . " : " . $stmt1->queryString . "<br>";
     }
 
-    if (mysqli_query($con,$queryForValue)){
-        echo "Query ran successfully: " . $queryForValue . "<br>";
+    if ($stmt2->execute()){
+        echo "Query ran successfully: " . $stmt2->queryString . "<br>";
     } else {
-        echo "Error running query: " . mysqli_error($con) . " : " . $queryForValue . "<br>";
+        echo "Error running query: " . $stmt2->errorInfo() . " : " . $stmt2->queryString . "<br>";
     }
 }
 
-mysqli_close($con);
+$dbh = null;
 
+
+// Print measured time
 $end = microtime(true);
 
 $laufzeit = $end - $start;

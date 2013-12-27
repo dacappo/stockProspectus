@@ -17,25 +17,18 @@ function connectToDB($server, $user, $password, $database) {
     return $con;
 }
 
+function connectToDatabase($server, $user, $password, $database) {
 
-function initializeDB($con) {
+    $dsn = 'mysql:dbname=' . $database . ';host=' . $server;
 
-    $sql = array();
-
-    array_push($sql, "DROP TABLE ShareValues");
-    array_push($sql, "DROP TABLE Shares");
-    array_push($sql, "CREATE TABLE Shares(ISIN CHAR(12) NOT NULL UNIQUE PRIMARY KEY, Name  VARCHAR(30), Currency VARCHAR(6), StockIndex VARCHAR(10))");
-    array_push($sql, "CREATE TABLE ShareValues(ISIN CHAR(12) NOT NULL, Timestamp TIMESTAMP NOT NULL, Value  DOUBLE(6,2), PRIMARY KEY(ISIN, Timestamp), FOREIGN KEY (ISIN) REFERENCES shares(ISIN))");
-
-    // Execute queries
-    foreach ($sql as $query) {
-        if (mysqli_query($con,$query)){
-            echo "Query ran successfully: " . $query . "<br>";
-        } else {
-            echo "Error running query: " . mysqli_error($con) . " : " . $query . "<br>";
-        }
+    try {
+        $dbh = new PDO($dsn, $user, $password);
+    } catch (PDOException $e) {
+        echo 'Connection failed: ' . $e->getMessage();
+        $dbh = false;
     }
-
+    return $dbh;
 }
+
 
 

@@ -100,7 +100,9 @@
 
     function initializeIndex() {
 
-        window.location.hash = '#'+ 'dax';
+        if (window.location.hash == "" | window.location.hash == "#")
+            window.location.hash = '#'+ 'dax';
+
         getIndex();
 
     }
@@ -152,7 +154,6 @@
     }
 
     initializeIndex();
-
 
     // Setting navigation event handlers
     $('.my_navigation li').click(function(e) {

@@ -26,7 +26,7 @@
       <file leaf-file-name="index.php" pinned="false" current="true" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/index.php">
           <provider selected="true" editor-type-id="text-editor">
-            <state line="102" column="41" selection-start="3274" selection-end="3274" vertical-scroll-proportion="0.5714286" vertical-offset="1202" max-vertical-offset="2730">
+            <state line="143" column="48" selection-start="4701" selection-end="4701" vertical-scroll-proportion="0.1643454" vertical-offset="2027" max-vertical-offset="2745">
               <folding />
             </state>
           </provider>
@@ -35,7 +35,16 @@
       <file leaf-file-name="db_connection.php" pinned="false" current="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/db_connection.php">
           <provider selected="true" editor-type-id="text-editor">
-            <state line="41" column="0" selection-start="1161" selection-end="1161" vertical-scroll-proportion="-23.125" vertical-offset="0" max-vertical-offset="645">
+            <state line="19" column="0" selection-start="382" selection-end="703" vertical-scroll-proportion="-9.375" vertical-offset="0" max-vertical-offset="540">
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="parseShareValues.php" pinned="false" current="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/parseShareValues.php">
+          <provider selected="true" editor-type-id="text-editor">
+            <state line="1861" column="12" selection-start="67570" selection-end="67570" vertical-scroll-proportion="-21.166666" vertical-offset="27347" max-vertical-offset="28320">
               <folding />
             </state>
           </provider>
@@ -44,9 +53,11 @@
       <file leaf-file-name="getShareValues.php" pinned="false" current="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/ajax/getShareValues.php">
           <provider selected="true" editor-type-id="text-editor">
-            <state line="40" column="49" selection-start="1258" selection-end="1258" vertical-scroll-proportion="-23.666666" vertical-offset="32" max-vertical-offset="750">
+            <state line="40" column="49" selection-start="1258" selection-end="1258" vertical-scroll-proportion="-24.375" vertical-offset="15" max-vertical-offset="750">
               <folding>
                 <element signature="e#6#87#0" expanded="true" />
+                <marker date="1388017338000" expanded="true" signature="397:682" placeholder="..." />
+                <marker date="1388017338000" expanded="true" signature="710:994" placeholder="..." />
               </folding>
             </state>
           </provider>
@@ -55,7 +66,7 @@
       <file leaf-file-name="initializeDatabase.php" pinned="false" current="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/initializeDatabase.php">
           <provider selected="true" editor-type-id="text-editor">
-            <state line="9" column="59" selection-start="138" selection-end="155" vertical-scroll-proportion="-3.125" vertical-offset="0" max-vertical-offset="195">
+            <state line="27" column="0" selection-start="904" selection-end="904" vertical-scroll-proportion="-14.375" vertical-offset="0" max-vertical-offset="435">
               <folding />
             </state>
           </provider>
@@ -72,10 +83,11 @@
     <option name="changedFiles">
       <list>
         <option value="$PROJECT_DIR$/unit_test.php" />
-        <option value="$PROJECT_DIR$/initializeDatabase.php" />
+        <option value="$PROJECT_DIR$/ajax/getShareValues.php" />
+        <option value="$PROJECT_DIR$/phpsec.php" />
         <option value="$PROJECT_DIR$/db_connection.php" />
         <option value="$PROJECT_DIR$/parseShareValues.php" />
-        <option value="$PROJECT_DIR$/ajax/getShareValues.php" />
+        <option value="$PROJECT_DIR$/initializeDatabase.php" />
         <option value="$PROJECT_DIR$/index.php" />
       </list>
     </option>
@@ -225,11 +237,11 @@
     <editor active="true" />
     <layout>
       <window_info id="Changes" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
-      <window_info id="Terminal" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.177521" sideWeight="0.5" order="10" side_tool="false" content_ui="tabs" />
-      <window_info id="TODO" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.32878152" sideWeight="0.5" order="6" side_tool="false" content_ui="tabs" />
+      <window_info id="Terminal" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.177521" sideWeight="0.5" order="10" side_tool="false" content_ui="tabs" />
+      <window_info id="TODO" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.32878152" sideWeight="0.5" order="6" side_tool="false" content_ui="tabs" />
       <window_info id="Database" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="Structure" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.24981357" sideWeight="0.6063218" order="1" side_tool="false" content_ui="tabs" />
-      <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.22582619" sideWeight="0.6712185" order="0" side_tool="false" content_ui="combo" />
+      <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.22582619" sideWeight="0.822479" order="0" side_tool="false" content_ui="combo" />
       <window_info id="Debug" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.4" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="Favorites" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="2" side_tool="true" content_ui="tabs" />
       <window_info id="Event Log" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="8" side_tool="true" content_ui="tabs" />
@@ -258,13 +270,6 @@
     </breakpoint-manager>
   </component>
   <component name="editorHistoryManager">
-    <entry file="file://$PROJECT_DIR$/simple_html_dom.php">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="1720" column="2" selection-start="0" selection-end="63317" vertical-scroll-proportion="0.0" vertical-offset="25800" max-vertical-offset="25890">
-          <folding />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/initializeDatabase.php">
       <provider selected="true" editor-type-id="text-editor">
         <state line="9" column="59" selection-start="138" selection-end="155" vertical-scroll-proportion="0.0" vertical-offset="135" max-vertical-offset="255">
@@ -335,39 +340,41 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/initializeDatabase.php">
+    <entry file="file://$PROJECT_DIR$/ajax/getShareValues.php">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="9" column="59" selection-start="138" selection-end="155" vertical-scroll-proportion="-3.125" vertical-offset="0" max-vertical-offset="195">
+        <state line="40" column="49" selection-start="1258" selection-end="1258" vertical-scroll-proportion="-24.375" vertical-offset="15" max-vertical-offset="750">
+          <folding>
+            <element signature="e#6#87#0" expanded="true" />
+            <marker date="1388017338000" expanded="true" signature="397:682" placeholder="..." />
+            <marker date="1388017338000" expanded="true" signature="710:994" placeholder="..." />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/db_connection.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="19" column="0" selection-start="382" selection-end="703" vertical-scroll-proportion="-9.375" vertical-offset="0" max-vertical-offset="540">
           <folding />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/parseShareValues.php">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="1833" column="62" selection-start="67070" selection-end="67070" vertical-scroll-proportion="11.153203" vertical-offset="19427" max-vertical-offset="28230">
+        <state line="1861" column="12" selection-start="67570" selection-end="67570" vertical-scroll-proportion="-21.166666" vertical-offset="27347" max-vertical-offset="28320">
           <folding />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/db_connection.php">
+    <entry file="file://$PROJECT_DIR$/initializeDatabase.php">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="41" column="0" selection-start="1161" selection-end="1161" vertical-scroll-proportion="-23.125" vertical-offset="0" max-vertical-offset="645">
+        <state line="27" column="0" selection-start="904" selection-end="904" vertical-scroll-proportion="-14.375" vertical-offset="0" max-vertical-offset="435">
           <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/ajax/getShareValues.php">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="40" column="49" selection-start="1258" selection-end="1258" vertical-scroll-proportion="-23.666666" vertical-offset="32" max-vertical-offset="750">
-          <folding>
-            <element signature="e#6#87#0" expanded="true" />
-          </folding>
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/index.php">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="102" column="41" selection-start="3274" selection-end="3274" vertical-scroll-proportion="0.5714286" vertical-offset="1202" max-vertical-offset="2730">
+        <state line="143" column="48" selection-start="4701" selection-end="4701" vertical-scroll-proportion="0.1643454" vertical-offset="2027" max-vertical-offset="2745">
           <folding />
         </state>
       </provider>
