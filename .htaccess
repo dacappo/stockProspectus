@@ -1,0 +1,7 @@
+Options +FollowSymLinks
+RewriteEngine On
+RewriteRule ^$			http://stocks.patrick-spiegel.de/index.php?index=dax
+RewriteRule ^dax$ 		http://stocks.patrick-spiegel.de/index.php?index=dax
+RewriteRule ^dowjones$   	http://stocks.patrick-spiegel.de/index.php?index=dj
+RewriteRule ^up$   		http://stocks.patrick-spiegel.de/index.php?index=up
+RewriteRule ^down$   		http://stocks.patrick-spiegel.de/index.php?index=down

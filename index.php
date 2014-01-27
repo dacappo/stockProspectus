@@ -8,6 +8,7 @@
     <meta name="author" content="Patrick Spiegel">
 
     <title>Stock Prospectus</title>
+    <link rel="shortcut icon" href="favicon.png" type="image/png"/>
 
     <!-- Bootstrap core CSS -->
     <link href="css/bootstrap.css" rel="stylesheet">
@@ -70,130 +71,105 @@
 
             <h4>Indexes</h4>
             <ul class="nav nav-pills nav-stacked">
-                <li class="active" ><a onclick="updateIndex('dax')">DAX</a></li>
-                <li><a onclick="updateIndex('dj')" >Dow Jones</a></li>
+                <li id="dax"><a href="/dax">DAX</a></li>
+                <li id="dj"><a href="/dowjones" >Dow Jones</a></li>
             </ul>
 
             <h4>Lists</h4>
             <ul class="nav nav-pills nav-stacked">
-                <li><a href="#up">Tending Upwards</a></li>
-                <li><a href="#down" >Tending Downwards</a></li>
+                <li id="up"><a href="/up">Tending Upwards</a></li>
+                <li id="down"><a href="/down" >Tending Downwards</a></li>
             </ul>
 
         </div>
         <div class="col-md-9">
             <div id="main_panel" class="panel panel-default">
 
+                <!-- Default panel contents -->
+                <div id="time_of_update" class="panel-heading">
 
+                </div>
+                <!-- Table -->
+                <table id="share-table" class="table">
+                    <tr>
+                        <th>Name</th>
+                        <th>Value</th>
+                        <th>Hourly Spread</th>
+                        <th class="hidden-sm">Daily Spread</th>
+                        <th class=" hidden-sm">Weekly Spread</th>
+                    </tr>
+
+
+<?php
+
+include('databaseConnection.php');
+
+$index = $_GET["index"];
+
+// Attributes
+$ISINs = array();
+$Names = array();
+$Values = array();
+
+$con = connectToDB("localhost","dacappa","veryoftirjoicTeg3","dacappa_stockProspectus");
+if ($index == "dax") {
+    $query = "SELECT * FROM (SELECT Shares.Name, Shares.ISIN, ShareValues.Value, ShareValues.SpreadH, ShareValues.SpreadD, ShareValues.SpreadW, ShareValues.Timestamp, Shares.Currency FROM Shares, ShareValues WHERE Shares.ISIN = ShareValues.ISIN AND Shares.StockIndex = 'DAX' ORDER BY ShareValues.Timestamp DESC LIMIT 30) AS result ORDER BY Name";
+} else if ($index == "dj") {
+    $query = "SELECT * FROM (SELECT Shares.Name, Shares.ISIN, ShareValues.Value, ShareValues.SpreadH, ShareValues.SpreadD, ShareValues.SpreadW, ShareValues.Timestamp, Shares.Currency FROM Shares, ShareValues WHERE Shares.ISIN = ShareValues.ISIN AND Shares.StockIndex = 'DJ' ORDER BY ShareValues.Timestamp DESC LIMIT 30) AS result ORDER BY Name";
+} else {
+    $query = "SELECT * FROM (SELECT Shares.Name, Shares.ISIN, ShareValues.Value, ShareValues.SpreadH, ShareValues.SpreadD, ShareValues.SpreadW, ShareValues.Timestamp, Shares.Currency FROM Shares, ShareValues WHERE Shares.ISIN = ShareValues.ISIN AND Shares.StockIndex = 'DAX' ORDER BY ShareValues.Timestamp DESC LIMIT 30) AS result ORDER BY Name";
+}
+
+$result = mysqli_query($con,$query);
+mysqli_close($con);
+
+$timeStamp = "Something went wrong!";
+
+
+
+while($row = mysqli_fetch_array($result)){
+    $timeStamp = $row['Timestamp'];
+    echo '<tr>';
+    echo '<td>' . $row['Name'] . '</td>';
+    echo '<td class="price">' . $row['Value'] . '</td>';
+
+    if ($row['SpreadH'] != $row['Value']) {
+        echo '<td class="price">' . $row['SpreadH'] . $row['Currency'] .  '</td>';
+    } else {
+        echo '<td class="price">-</td>';
+    }
+
+    if ($row['SpreadD'] != $row['Value']) {
+        echo '<td class="hidden-sm price">' . $row['SpreadD'] . $row['Currency'] . '</td>';
+    } else {
+        echo '<td class="hidden-sm price">-</td>';
+    }
+
+    if ($row['SpreadW'] != $row['Value']) {
+        echo '<td class="price hidden-sm" >' . $row['SpreadW'] . $row['Currency'] .  '</td>';
+    } else {
+        echo '<td class="hidden-sm price">-</td>';
+    }
+
+
+
+    echo '</tr>';
+}
+
+echo '<script>document.getElementById("time_of_update").innerHTML = "' . $timeStamp . '"; document.getElementById("' . $index . '").setAttribute("class","active")</script>';
+
+?>
+                </table>
             </div>
         </div>
     </div>
 
-<!-- Bootstrap core JavaScript
-================================================== -->
-<!-- Placed at the end of the document so the pages load faster -->
-<script src="https://code.jquery.com/jquery-1.10.2.min.js"></script>
-<script src="//ajax.googleapis.com/ajax/libs/jqueryui/1.10.3/jquery-ui.min.js"></script>
-<script src="js/bootstrap.min.js"></script>
-
-<script>
-
-    function initializeIndex() {
-
-        if (window.location.hash == "" | window.location.hash == "#")
-            window.location.hash = '#'+ 'dax';
-
-        getIndex();
-
-    }
-
-
-    function updateIndex(index) {
-
-        window.location.hash = '#'+ index;
-
-        $('#main_panel').toggle("fade","slow",function() {getIndex()});
-
-        $('#main_panel').toggle("fade","slow");
-    }
-
-    function getIndex() {
-
-        var panel = document.getElementById('main_panel');
-
-        var request = $.ajax({
-            type: "POST",
-            url: "ajax/getShareValues.php?index=" + location.hash.slice(1),
-            dataType: "json"
-        });
-
-        panel.innerHTML = '<!-- Default panel contents --><div id="time_of_update" class="panel-heading"></div><!-- Table --><table id="share-table" class="table"><tr><th>Name</th><th>Value</th><th>Hourly Spread</th><th>Daily Spread</th><th>Weekly Spread</th></tr></table>';
-
-        request.done(function( json ) {
-            json.shares.forEach(function(share) {
-                var record = document.createElement('tr');
-                var record_name = document.createElement('td');
-                var record_isin = document.createElement('td');
-                var record_value = document.createElement('td');
-                var record_spreadH = document.createElement('td');
-                var record_spreadD = document.createElement('td');
-                var record_spreadW = document.createElement('td');
-                record_value.setAttribute('class', 'price');
-                record_spreadH.setAttribute('class', 'price');
-                record_spreadD.setAttribute('class', 'price');
-                record_spreadW.setAttribute('class', 'price');
-
-                record_name.innerText = share.Name;
-                record_isin.innerText = share.ISIN;
-                record_value.innerText = share.Value + share.Currency;
-
-                if (share.SpreadH != share.Value) {
-                    record_spreadH.innerText =share.SpreadH + share.Currency;
-                } else {
-                    record_spreadH.innerText = "-";
-                }
-
-                if (share.SpreadD != share.Value) {
-                    record_spreadD.innerText =share.SpreadD + share.Currency;
-                } else {
-                    record_spreadD.innerText = "-";
-                }
-
-                if (share.SpreadW != share.Value) {
-                    record_spreadW.innerText = share.SpreadW + share.Currency;
-                } else {
-                    record_spreadW.innerText = "-";
-                }
-
-                record.appendChild(record_name);
-                //record.appendChild(record_isin);
-                record.appendChild(record_value);
-                record.appendChild(record_spreadH);
-                record.appendChild(record_spreadD);
-                record.appendChild(record_spreadW);
-
-                document.getElementById('share-table').children[0].appendChild(record);
-            });
-
-            document.getElementById('time_of_update').innerHTML = 'Timestamp: ' + json.Timestamp;
-        });
-
-    }
-
-    initializeIndex();
-
-    // Setting navigation event handlers
-    $('.my_navigation li').click(function(e) {
-        $('.my_navigation li.active').removeClass('active');
-        var $this = $(this);
-        if (!$this.hasClass('active')) {
-            $this.addClass('active');
-        }
-        e.preventDefault();
-    });
-
-</script>
-
+    <!-- Bootstrap core JavaScript
+    ================================================== -->
+    <!-- Placed at the end of the document so the pages load faster -->
+    <script src="https://code.jquery.com/jquery-1.10.2.min.js"></script>
+    <script src="//ajax.googleapis.com/ajax/libs/jqueryui/1.10.3/jquery-ui.min.js"></script>
+    <script src="js/bootstrap.min.js"></script>
 
 </body>
 </html>
