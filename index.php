@@ -26,6 +26,14 @@
             text-align: right;
         }
 
+        .positive {
+            color: #4cae4c;
+        }
+
+        .negative {
+            color: #c12e2a;
+        }
+
     </style>
 
     <!-- HTML5 shim and Respond.js IE8 support of HTML5 elements and media queries -->
@@ -71,32 +79,29 @@
 
             <h4>Indexes</h4>
             <ul class="nav nav-pills nav-stacked">
-                <li id="dax"><a href="/dax">DAX</a></li>
-                <li id="dj"><a href="/dowjones" >Dow Jones</a></li>
+                <li id="dax"><a href="./dax">DAX</a></li>
+                <li id="dj"><a href="./dowjones" >Dow Jones</a></li>
             </ul>
 
             <h4>Lists</h4>
             <ul class="nav nav-pills nav-stacked">
-                <li id="up"><a href="/up">Tending Upwards</a></li>
-                <li id="down"><a href="/down" >Tending Downwards</a></li>
+                <li id="up"><a href="./up">Tending Upwards</a></li>
+                <li id="down"><a href="./down" >Tending Downwards</a></li>
             </ul>
+            <!-- Default panel contents -->
+            <br><br><br>
+            <div class="panel">Timestamp: <span id="time_of_update" class="label label-default">Info</span></div>
 
         </div>
         <div class="col-md-9">
-            <div id="main_panel" class="panel panel-default">
-
-                <!-- Default panel contents -->
-                <div id="time_of_update" class="panel-heading">
-
-                </div>
                 <!-- Table -->
-                <table id="share-table" class="table">
+                <table id="share-table" class="table table-hover">
                     <tr>
                         <th>Name</th>
-                        <th>Value</th>
-                        <th>Hourly Spread</th>
-                        <th class="hidden-sm">Daily Spread</th>
-                        <th class=" hidden-sm">Weekly Spread</th>
+                        <th class="price">Value</th>
+                        <th class="price">Hourly <span class="glyphicon glyphicon-stats"></span></th>
+                        <th class="price hidden-xs">Daily <span class="glyphicon glyphicon-stats"></span></th>
+                        <th class="price hidden-xs">Weekly <span class="glyphicon glyphicon-stats"></span></th>
                     </tr>
 
 
@@ -125,42 +130,52 @@ mysqli_close($con);
 
 $timeStamp = "Something went wrong!";
 
-
-
 while($row = mysqli_fetch_array($result)){
     $timeStamp = $row['Timestamp'];
     echo '<tr>';
     echo '<td>' . $row['Name'] . '</td>';
-    echo '<td class="price">' . $row['Value'] . '</td>';
+    echo '<td class="price">' . $row['Value'] . $row['Currency'] . '</td>';
 
-    if ($row['SpreadH'] != $row['Value']) {
-        echo '<td class="price">' . $row['SpreadH'] . $row['Currency'] .  '</td>';
+    if ($row['SpreadH'] != 9999.99) {
+        if ($row['SpreadH'] >= 0) {
+            echo '<td class="price positive">' . $row['SpreadH'] . '%' .  '</td>';
+        } else {
+            echo '<td class="price negative">' . $row['SpreadH'] . '%' .  '</td>';
+        }
     } else {
         echo '<td class="price">-</td>';
     }
 
-    if ($row['SpreadD'] != $row['Value']) {
-        echo '<td class="hidden-sm price">' . $row['SpreadD'] . $row['Currency'] . '</td>';
+    if ($row['SpreadD'] != 9999.99) {
+        if ($row['SpreadD'] >= 0) {
+            echo '<td class="hidden-xs price positive">' . $row['SpreadD'] . '%' . '</td>';
+        } else {
+            echo '<td class="hidden-xs price negative">' . $row['SpreadD'] . '%' . '</td>';
+        }
     } else {
-        echo '<td class="hidden-sm price">-</td>';
+        echo '<td class="hidden-xs price">-</td>';
     }
 
-    if ($row['SpreadW'] != $row['Value']) {
-        echo '<td class="price hidden-sm" >' . $row['SpreadW'] . $row['Currency'] .  '</td>';
+    if ($row['SpreadW'] != 9999.99) {
+        if ($row['SpreadW'] >= 0) {
+            echo '<td class="price hidden-xs positive" >' . $row['SpreadW'] . '%' .  '</td>';
+        } else {
+            echo '<td class="price hidden-xs negative" >' . $row['SpreadW'] . '%' .  '</td>';
+        }
+
     } else {
-        echo '<td class="hidden-sm price">-</td>';
+        echo '<td class="hidden-xs price">-</td>';
     }
 
 
 
     echo '</tr>';
-}
 
+}
+echo '</table>';
 echo '<script>document.getElementById("time_of_update").innerHTML = "' . $timeStamp . '"; document.getElementById("' . $index . '").setAttribute("class","active")</script>';
 
 ?>
-                </table>
-            </div>
         </div>
     </div>
 

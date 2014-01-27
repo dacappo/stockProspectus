@@ -1750,6 +1750,10 @@ function connectToDatabase($server, $user, $password, $database) {
     return $dbh;
 }
 
+function getPercentFromValues($value, $spread) {
+    return round(($spread/($value-$spread))*100,2);
+}
+
 // Parse DAX Values //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 // Attributes
@@ -1814,7 +1818,12 @@ for($i = 0; $i < sizeof($ISINs) && $i < sizeof($Names) && $i < sizeof($Values); 
 
     $offset = 0;
     if ($stmt0->execute()){
-        $spreadh = $value - array_pop($stmt0->fetch());
+        $spreadh = $value - array_pop($stmt0->fetch()); // currency
+        if ($spreadh != $value) {
+            $spreadh = getPercentFromValues($value, $spreadh); // percentage
+        } else {
+            $spreadh = 9999.99;
+        }
         echo "Query ran successfully: <span>" . $stmt0->queryString . "</span><br>";
     } else {
         $spreadh = 0;
@@ -1824,6 +1833,11 @@ for($i = 0; $i < sizeof($ISINs) && $i < sizeof($Names) && $i < sizeof($Values); 
     $offset = 24;
     if ($stmt0->execute()){
         $spreadd = $value - array_pop($stmt0->fetch());
+        if ($spreadd != $value) {
+            $spreadd = getPercentFromValues($value, $spreadd); // percentage
+        } else {
+            $spreadd = 9999.99;
+        }
         echo "Query ran successfully: <span>" . $stmt0->queryString . "</span><br>";
     } else {
         $spreadd = 0;
@@ -1833,6 +1847,11 @@ for($i = 0; $i < sizeof($ISINs) && $i < sizeof($Names) && $i < sizeof($Values); 
     $offset = 168;
     if ($stmt0->execute()){
         $spreadw = $value - array_pop($stmt0->fetch());
+        if ($spreadw != $value) {
+            $spreadw = getPercentFromValues($value, $spreadw); // percentage
+        } else {
+            $spreadw = 9999.99;
+        }
         echo "Query ran successfully: <span>" . $stmt0->queryString . "</span><br>";
     } else {
         $spreadw = 0;
@@ -1900,6 +1919,11 @@ for($i = 0; $i < sizeof($ISINs) && $i < sizeof($Names) && $i < sizeof($Values); 
     $offset = 0;
     if ($stmt0->execute()){
         $spreadh = $value - array_pop($stmt0->fetch());
+        if ($spreadh != $value) {
+            $spreadh = getPercentFromValues($value, $spreadh); // percentage
+        } else {
+            $spreadh = 9999.99;
+        }
         echo "Query ran successfully: <span>" . $stmt0->queryString . "</span><br>";
     } else {
         $spreadh = 0;
@@ -1909,6 +1933,11 @@ for($i = 0; $i < sizeof($ISINs) && $i < sizeof($Names) && $i < sizeof($Values); 
     $offset = 24;
     if ($stmt0->execute()){
         $spreadd = $value - array_pop($stmt0->fetch());
+        if ($spreadd != $value) {
+            $spreadd = getPercentFromValues($value, $spreadd); // percentage
+        } else {
+            $spreadd = 9999.99;
+        }
         echo "Query ran successfully: <span>" . $stmt0->queryString . "</span><br>";
     } else {
         $spreadd = 0;
@@ -1918,6 +1947,11 @@ for($i = 0; $i < sizeof($ISINs) && $i < sizeof($Names) && $i < sizeof($Values); 
     $offset = 168;
     if ($stmt0->execute()){
         $spreadw = $value - array_pop($stmt0->fetch());
+        if ($spreadw != $value) {
+            $spreadw = getPercentFromValues($value, $spreadw); // percentage
+        } else {
+            $spreadw = 9999.99;
+        }
         echo "Query ran successfully: <span>" . $stmt0->queryString . "</span><br>";
     } else {
         $spreadw = 0;
