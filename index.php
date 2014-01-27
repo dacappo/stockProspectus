@@ -34,6 +34,11 @@
             color: #c12e2a;
         }
 
+        .sum_up_row {
+            background-color: #f5f5f5;
+            font-weight: 800;
+        }
+
     </style>
 
     <!-- HTML5 shim and Respond.js IE8 support of HTML5 elements and media queries -->
@@ -55,7 +60,7 @@
                 <span class="icon-bar"></span>
             </button>
 
-            <a class="navbar-brand" href="#">Share Prospectus</a>
+            <a class="navbar-brand" href="#"><span class="glyphicon glyphicon-stats"></span> Stock Prospectus</a>
         </div>
         <div class="collapse navbar-collapse">
             <ul class="nav navbar-nav">
@@ -166,12 +171,56 @@ while($row = mysqli_fetch_array($result)){
     } else {
         echo '<td class="hidden-xs price">-</td>';
     }
-
-
-
     echo '</tr>';
-
 }
+
+$con = connectToDB("localhost","dacappa","veryoftirjoicTeg3","dacappa_stockProspectus");
+if ($index == "dax") {
+    $query = "SELECT AVG(SpreadH) AS SpreadH, AVG(SpreadD) AS SpreadD, AVG(SpreadW) AS SpreadW FROM(SELECT ShareValues.SpreadH AS SpreadH, ShareValues.SpreadD AS SpreadD, ShareValues.SpreadW AS SpreadW FROM Shares, ShareValues WHERE Shares.ISIN = ShareValues.ISIN AND Shares.StockIndex = 'DAX' ORDER BY ShareValues.Timestamp DESC LIMIT 30) AS result";
+} else if ($index == "dj") {
+    $query = "SELECT AVG(SpreadH) AS SpreadH, AVG(SpreadD) AS SpreadD, AVG(SpreadW) AS SpreadW FROM(SELECT ShareValues.SpreadH AS SpreadH, ShareValues.SpreadD AS SpreadD, ShareValues.SpreadW AS SpreadW FROM Shares, ShareValues WHERE Shares.ISIN = ShareValues.ISIN AND Shares.StockIndex = 'DJ' ORDER BY ShareValues.Timestamp DESC LIMIT 30) AS result";
+} else {
+    $query = "SELECT AVG(SpreadH) AS SpreadH, AVG(SpreadD) AS SpreadD, AVG(SpreadW) AS SpreadW FROM(SELECT ShareValues.SpreadH AS SpreadH, ShareValues.SpreadD AS SpreadD, ShareValues.SpreadW AS SpreadW FROM Shares, ShareValues WHERE Shares.ISIN = ShareValues.ISIN AND Shares.StockIndex = 'DAX' ORDER BY ShareValues.Timestamp DESC LIMIT 30) AS result";
+}
+
+$result = mysqli_query($con,$query);
+mysqli_close($con);
+
+echo '<tr class="sum_up_row"><td><span class="glyphicon glyphicon-stats"></span></td><td></td>';
+while($row = mysqli_fetch_array($result)){
+
+    if ($row['SpreadH'] < 1000.00) {
+        if ($row['SpreadH'] >= 0) {
+            echo '<td class="hidden-xs price positive">' . round($row['SpreadH'],2) . '%' . '</td>';
+        } else {
+            echo '<td class="hidden-xs price negative">' . round($row['SpreadH'],2) . '%' . '</td>';
+        }
+    } else {
+        echo '<td class="hidden-xs price">-</td>';
+    }
+
+    if ($row['SpreadD'] < 1000.00) {
+        if ($row['SpreadD'] >= 0) {
+            echo '<td class="hidden-xs price positive">' . round($row['SpreadD'],2) . '%' . '</td>';
+        } else {
+            echo '<td class="hidden-xs price negative">' . round($row['SpreadD'],2) . '%' . '</td>';
+        }
+    } else {
+        echo '<td class="hidden-xs price">-</td>';
+    }
+
+    if ($row['SpreadW'] < 1000.00) {
+        if ($row['SpreadW'] >= 0) {
+            echo '<td class="hidden-xs price positive">' . round($row['SpreadW'],2) . '%' . '</td>';
+        } else {
+            echo '<td class="hidden-xs price negative">' . round($row['SpreadW'],2) . '%' . '</td>';
+        }
+    } else {
+        echo '<td class="hidden-xs price">-</td>';
+    }
+}
+echo '</tr>';
+
 echo '</table>';
 echo '<script>document.getElementById("time_of_update").innerHTML = "' . $timeStamp . '"; document.getElementById("' . $index . '").setAttribute("class","active")</script>';
 
