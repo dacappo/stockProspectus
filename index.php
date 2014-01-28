@@ -121,6 +121,28 @@ $ISINs = array();
 $Names = array();
 $Values = array();
 
+$avgSpreadH;
+$avgSpreadD;
+$avgSpreadW;
+
+$con = connectToDB("localhost","dacappa","veryoftirjoicTeg3","dacappa_stockProspectus");
+if ($index == "dax") {
+    $query = "SELECT AVG(SpreadH) AS SpreadH, AVG(SpreadD) AS SpreadD, AVG(SpreadW) AS SpreadW FROM(SELECT ShareValues.SpreadH AS SpreadH, ShareValues.SpreadD AS SpreadD, ShareValues.SpreadW AS SpreadW FROM Shares, ShareValues WHERE Shares.ISIN = ShareValues.ISIN AND Shares.StockIndex = 'DAX' ORDER BY ShareValues.Timestamp DESC LIMIT 30) AS result";
+} else if ($index == "dj") {
+    $query = "SELECT AVG(SpreadH) AS SpreadH, AVG(SpreadD) AS SpreadD, AVG(SpreadW) AS SpreadW FROM(SELECT ShareValues.SpreadH AS SpreadH, ShareValues.SpreadD AS SpreadD, ShareValues.SpreadW AS SpreadW FROM Shares, ShareValues WHERE Shares.ISIN = ShareValues.ISIN AND Shares.StockIndex = 'DJ' ORDER BY ShareValues.Timestamp DESC LIMIT 30) AS result";
+} else {
+    $query = "SELECT AVG(SpreadH) AS SpreadH, AVG(SpreadD) AS SpreadD, AVG(SpreadW) AS SpreadW FROM(SELECT ShareValues.SpreadH AS SpreadH, ShareValues.SpreadD AS SpreadD, ShareValues.SpreadW AS SpreadW FROM Shares, ShareValues WHERE Shares.ISIN = ShareValues.ISIN AND Shares.StockIndex = 'DAX' ORDER BY ShareValues.Timestamp DESC LIMIT 30) AS result";
+}
+
+$result = mysqli_query($con,$query);
+mysqli_close($con);
+
+while($row = mysqli_fetch_array($result)){
+    $avgSpreadH = round($row['SpreadH'],2);
+    $avgSpreadD = round($row['SpreadD'],2);
+    $avgSpreadW = round($row['SpreadW'],2);
+}
+
 $con = connectToDB("localhost","dacappa","veryoftirjoicTeg3","dacappa_stockProspectus");
 if ($index == "dax") {
     $query = "SELECT * FROM (SELECT Shares.Name, Shares.ISIN, ShareValues.Value, ShareValues.SpreadH, ShareValues.SpreadD, ShareValues.SpreadW, ShareValues.Timestamp, Shares.Currency FROM Shares, ShareValues WHERE Shares.ISIN = ShareValues.ISIN AND Shares.StockIndex = 'DAX' ORDER BY ShareValues.Timestamp DESC LIMIT 30) AS result ORDER BY Name";
@@ -142,7 +164,7 @@ while($row = mysqli_fetch_array($result)){
     echo '<td class="price">' . $row['Value'] . $row['Currency'] . '</td>';
 
     if ($row['SpreadH'] != 9999.99) {
-        if ($row['SpreadH'] >= 0) {
+        if ($row['SpreadH'] >= $avgSpreadH) {
             echo '<td class="price positive">' . $row['SpreadH'] . '%' .  '</td>';
         } else {
             echo '<td class="price negative">' . $row['SpreadH'] . '%' .  '</td>';
@@ -152,7 +174,7 @@ while($row = mysqli_fetch_array($result)){
     }
 
     if ($row['SpreadD'] != 9999.99) {
-        if ($row['SpreadD'] >= 0) {
+        if ($row['SpreadD'] >= $avgSpreadD) {
             echo '<td class="hidden-xs price positive">' . $row['SpreadD'] . '%' . '</td>';
         } else {
             echo '<td class="hidden-xs price negative">' . $row['SpreadD'] . '%' . '</td>';
@@ -162,7 +184,7 @@ while($row = mysqli_fetch_array($result)){
     }
 
     if ($row['SpreadW'] != 9999.99) {
-        if ($row['SpreadW'] >= 0) {
+        if ($row['SpreadW'] >= $avgSpreadW) {
             echo '<td class="price hidden-xs positive" >' . $row['SpreadW'] . '%' .  '</td>';
         } else {
             echo '<td class="price hidden-xs negative" >' . $row['SpreadW'] . '%' .  '</td>';
@@ -174,51 +196,38 @@ while($row = mysqli_fetch_array($result)){
     echo '</tr>';
 }
 
-$con = connectToDB("localhost","dacappa","veryoftirjoicTeg3","dacappa_stockProspectus");
-if ($index == "dax") {
-    $query = "SELECT AVG(SpreadH) AS SpreadH, AVG(SpreadD) AS SpreadD, AVG(SpreadW) AS SpreadW FROM(SELECT ShareValues.SpreadH AS SpreadH, ShareValues.SpreadD AS SpreadD, ShareValues.SpreadW AS SpreadW FROM Shares, ShareValues WHERE Shares.ISIN = ShareValues.ISIN AND Shares.StockIndex = 'DAX' ORDER BY ShareValues.Timestamp DESC LIMIT 30) AS result";
-} else if ($index == "dj") {
-    $query = "SELECT AVG(SpreadH) AS SpreadH, AVG(SpreadD) AS SpreadD, AVG(SpreadW) AS SpreadW FROM(SELECT ShareValues.SpreadH AS SpreadH, ShareValues.SpreadD AS SpreadD, ShareValues.SpreadW AS SpreadW FROM Shares, ShareValues WHERE Shares.ISIN = ShareValues.ISIN AND Shares.StockIndex = 'DJ' ORDER BY ShareValues.Timestamp DESC LIMIT 30) AS result";
-} else {
-    $query = "SELECT AVG(SpreadH) AS SpreadH, AVG(SpreadD) AS SpreadD, AVG(SpreadW) AS SpreadW FROM(SELECT ShareValues.SpreadH AS SpreadH, ShareValues.SpreadD AS SpreadD, ShareValues.SpreadW AS SpreadW FROM Shares, ShareValues WHERE Shares.ISIN = ShareValues.ISIN AND Shares.StockIndex = 'DAX' ORDER BY ShareValues.Timestamp DESC LIMIT 30) AS result";
-}
-
-$result = mysqli_query($con,$query);
-mysqli_close($con);
 
 echo '<tr class="sum_up_row"><td><span class="glyphicon glyphicon-stats"></span></td><td></td>';
-while($row = mysqli_fetch_array($result)){
-
-    if ($row['SpreadH'] < 1000.00) {
-        if ($row['SpreadH'] >= 0) {
-            echo '<td class="hidden-xs price positive">' . round($row['SpreadH'],2) . '%' . '</td>';
-        } else {
-            echo '<td class="hidden-xs price negative">' . round($row['SpreadH'],2) . '%' . '</td>';
-        }
+if ($avgSpreadH < 1000.00) {
+    if ($avgSpreadH >= 0) {
+        echo '<td class="price ">' . $avgSpreadH . '%' . '</td>';
     } else {
-        echo '<td class="hidden-xs price">-</td>';
+        echo '<td class="price negative">' . $avgSpreadH . '%' . '</td>';
     }
-
-    if ($row['SpreadD'] < 1000.00) {
-        if ($row['SpreadD'] >= 0) {
-            echo '<td class="hidden-xs price positive">' . round($row['SpreadD'],2) . '%' . '</td>';
-        } else {
-            echo '<td class="hidden-xs price negative">' . round($row['SpreadD'],2) . '%' . '</td>';
-        }
-    } else {
-        echo '<td class="hidden-xs price">-</td>';
-    }
-
-    if ($row['SpreadW'] < 1000.00) {
-        if ($row['SpreadW'] >= 0) {
-            echo '<td class="hidden-xs price positive">' . round($row['SpreadW'],2) . '%' . '</td>';
-        } else {
-            echo '<td class="hidden-xs price negative">' . round($row['SpreadW'],2) . '%' . '</td>';
-        }
-    } else {
-        echo '<td class="hidden-xs price">-</td>';
-    }
+} else {
+    echo '<td class="hidden-xs price">-</td>';
 }
+
+if ($avgSpreadD < 1000.00) {
+    if ($avgSpreadD >= 0) {
+        echo '<td class="hidden-xs price positive">' . $avgSpreadD . '%' . '</td>';
+    } else {
+        echo '<td class="hidden-xs price negative">' . $avgSpreadD . '%' . '</td>';
+    }
+} else {
+    echo '<td class="hidden-xs price">-</td>';
+}
+
+if ($avgSpreadW < 1000.00) {
+    if ($avgSpreadW >= 0) {
+        echo '<td class="hidden-xs price positive">' . $avgSpreadW . '%' . '</td>';
+    } else {
+        echo '<td class="hidden-xs price negative">' . $avgSpreadW . '%' . '</td>';
+    }
+} else {
+    echo '<td class="hidden-xs price">-</td>';
+}
+
 echo '</tr>';
 
 echo '</table>';
