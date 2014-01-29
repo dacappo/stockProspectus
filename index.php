@@ -200,17 +200,17 @@ if ($avgSpreadH < 1000.00) {
     if ($avgSpreadH >= 0) {
         echo '<td class="price ">' . $avgSpreadH . '%' . '</td>';
     } else {
-        echo '<td class="price negative">' . $avgSpreadH . '%' . '</td>';
+        echo '<td class="price">' . $avgSpreadH . '%' . '</td>';
     }
 } else {
-    echo '<td class="hidden-xs price">-</td>';
+    echo '<td class="price">-</td>';
 }
 
 if ($avgSpreadD < 1000.00) {
     if ($avgSpreadD >= 0) {
-        echo '<td class="hidden-xs price positive">' . $avgSpreadD . '%' . '</td>';
+        echo '<td class="hidden-xs price">' . $avgSpreadD . '%' . '</td>';
     } else {
-        echo '<td class="hidden-xs price negative">' . $avgSpreadD . '%' . '</td>';
+        echo '<td class="hidden-xs price">' . $avgSpreadD . '%' . '</td>';
     }
 } else {
     echo '<td class="hidden-xs price">-</td>';
@@ -218,9 +218,9 @@ if ($avgSpreadD < 1000.00) {
 
 if ($avgSpreadW < 1000.00) {
     if ($avgSpreadW >= 0) {
-        echo '<td class="hidden-xs price positive">' . $avgSpreadW . '%' . '</td>';
+        echo '<td class="hidden-xs price">' . $avgSpreadW . '%' . '</td>';
     } else {
-        echo '<td class="hidden-xs price negative">' . $avgSpreadW . '%' . '</td>';
+        echo '<td class="hidden-xs price">' . $avgSpreadW . '%' . '</td>';
     }
 } else {
     echo '<td class="hidden-xs price">-</td>';
