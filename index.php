@@ -65,7 +65,7 @@
         <div class="collapse navbar-collapse">
             <ul class="nav navbar-nav">
                 <li class="active"><a href="#">Home</a></li>
-                <li><a href="#about">About</a></li>
+                <li><a href="admin/">Settings</a></li>
                 <li><a href="#contact">Contact</a></li>
             </ul>
 
@@ -95,7 +95,15 @@
             </ul>
             <!-- Default panel contents -->
             <br><br><br>
-            <div class="panel">Timestamp: <span id="time_of_update" class="label label-default">Info</span></div>
+            <table>
+            <tr><td>Timestamp </td><td><span id="time_of_update" class="label label-primary">Info</span></td></tr>
+
+            <tr><td>Hourly </td><td><span id="time_of_update" class="label label-primary">last hour</span></td></tr>
+
+            <tr><td>Daily </td><td><span id="time_of_update" class="label label-primary">last 24 hours</span></td></tr>
+
+            <tr><td>Weekly </td><td><span id="time_of_update" class="label label-primary">last 168 hours</span></td></tr>
+            </table>
 
         </div>
         <div class="col-md-9">
@@ -112,7 +120,7 @@
 
 <?php
 
-include('databaseConnection.php');
+include('lib/databaseConnection.php');
 
 $index = $_GET["index"];
 

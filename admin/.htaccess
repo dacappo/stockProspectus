@@ -1,0 +1,5 @@
+AuthType Basic
+AuthName "Protected directory"
+AuthUserFile .htuser
+Require valid-user
+
