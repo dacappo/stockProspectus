@@ -28,7 +28,6 @@ foreach($rows as $row => $data){
     if ($stmt->execute()){
         echo "Query ran successfully: <span>" . $stmt->queryString . "</span><br>";
     } else {
-        $spreadh = 0;
         echo "Error running query: " . array_pop($stmt->errorInfo()) . " : <span>" . $stmt->queryString . "</span><br>";
     }
 
