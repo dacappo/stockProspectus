@@ -21,10 +21,11 @@ $dbh = connectToDatabase("localhost","dacappa","veryoftirjoicTeg3","dacappa_stoc
 
 $stmtQueries = $dbh->prepare('SELECT Shares.ISIN, TweetSearch.Query FROM Shares, TweetSearch WHERE Shares.ISIN = TweetSearch.ISIN');
 
-$stmtTweet = $dbh->prepare('INSERT INTO Tweets VALUES(:tweetID, :isin,:retweets, 0)');
+$stmtTweet = $dbh->prepare('INSERT INTO Tweets VALUES(:tweetID, :isin,:retweets,:tweet, 0)');
 $stmtTweet->bindParam(':tweetID', $tweetID);
 $stmtTweet->bindParam(':isin', $isin);
 $stmtTweet->bindParam(':retweets', $retweets);
+$stmtTweet->bindParam(':tweet', $tweet);
 
 $stmtToken = $dbh->prepare('INSERT INTO TweetTokens VALUES (:tweetID, :token)');
 $stmtToken->bindParam(':token', $token);
@@ -43,7 +44,7 @@ if ($results = $stmtQueries->execute()){
 }
 
 while ($row = $stmtQueries->fetch()) {
-    $query = '@' .$row['Query'] . '-filter:retweet';
+    $query = '@' .$row['Query'] . '-filter:retweets';
     $isin = $row['ISIN'];
 
     // Twitter API call
@@ -58,6 +59,7 @@ while ($row = $stmtQueries->fetch()) {
     foreach ($content->{'statuses'} AS $status) {
         $tweetID = $status->{'id'};
         $retweets = $status->{'retweet_count'};
+        $tweet = $status->{'text'};
 
         if ($stmtTweet->execute()){
             echo "Query ran successfully: <span>" . $stmtTweet->queryString . "</span><br>";
@@ -65,7 +67,7 @@ while ($row = $stmtQueries->fetch()) {
             echo "Error running query: " . array_pop($stmtTweet->errorInfo()) . " : <span>" . $stmtTweet->queryString . "</span><br>";
         }
 
-        $tweet = escapeTweet($status->{'text'});
+        $tweet = escapeTweet($tweet);
         $tweet = filterWhiteSpaces($tweet);
 
         $tokens = explode(" ", $tweet);
@@ -110,6 +112,7 @@ function escapeTweet($tweet){
 
     // Filter Urls and special characters
     $tweet = preg_replace('#http:[^ \t]*#',' ',$tweet);
+    $tweet = preg_replace('#n\'t#',' not',$tweet);
     $tweet = str_replace('?',' ',$tweet);
     $tweet = str_replace('!',' ',$tweet);
     $tweet = str_replace('\'',' ',$tweet);

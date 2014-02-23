@@ -8,8 +8,8 @@ $dbh = connectToDatabase("localhost","dacappa","veryoftirjoicTeg3","dacappa_stoc
 $sql = array();
 array_push($sql, "DROP TABLE SentimentValues");
 array_push($sql, "DROP TABLE Prospectus");
-array_push($sql, "CREATE TABLE SentimentValues(Token VARCHAR(30) NOT NULL UNIQUE PRIMARY KEY, Sentiment SMALLINT)");
-array_push($sql, "CREATE TABLE Prospectus(ISIN CHAR(12), Sentiment SMALLINT, FOREIGN KEY (ISIN) REFERENCES Shares(ISIN))");
+array_push($sql, "CREATE TABLE SentimentValues(Token VARCHAR(30) NOT NULL UNIQUE PRIMARY KEY, Sentiment FLOAT)");
+array_push($sql, "CREATE TABLE Prospectus(ISIN CHAR(12), Sentiment FLOAT, FOREIGN KEY (ISIN) REFERENCES Shares(ISIN))");
 
 // Execute queries
 foreach ($sql as $statement) {

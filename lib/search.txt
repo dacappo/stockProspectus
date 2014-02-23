@@ -1,0 +1,60 @@
+DE0005140008|Deutsche Bank|DeutscheBank
+DE0005190003|BMW|bmw
+DE0005200000|Beiersdorf|beiersdorf
+DE0005439004|Continental|continentaltire
+DE0005470405|LANXESS|lanxess
+DE0005552004|Deutsche Post|deutschePost
+DE0005557508|Deutsche Telekom|deutscheTelekom
+DE0005785604|Fresenius|fresenius
+DE0005785802|Fresenius Med Care|FreseniusMC
+DE0005810055|Deutsche Boerse|deutscheBoerse
+DE0006047004|HeidelbergCement|HeidelbergCB
+DE0006048432|Henkel Vz|henkel
+DE0006231004|Infineon Technolo|infineon
+DE0006483001|Linde|linde
+DE0006599905|Merck|merck
+DE0007037129|RWE|rwe
+DE0007100000|Daimler|daimler
+DE0007164600|SAP|sap
+DE0007236101|Siemens|siemens
+DE0007500001|ThyssenKrupp|thyssenKrupp
+DE0007664039|Volkswagen Vz|volkswagen
+DE0008232125|Dt.Lufthansa|lufthansa
+DE0008404005|Allianz|allianz
+DE0008430026|Muench Rueckvers|MunichRe
+DE000A1EWWW0|adidas|adidas
+DE000BASF111|BASF|basf
+DE000BAY0017|Bayer|bayer
+DE000CBK1001|Commerzbank|commerzbank
+DE000ENAG999|E.ON|EONEnergie
+DE000KSAG888|K+S|KPlusS
+US00206R1023|AT&amp;T|ATandT
+US0258161092|American Express|AmericanExpress
+US0970231058|Boeing Co|boeing
+US1491231015|Caterpillar|caterpillar
+US1667641005|Chevron|chevron
+US17275R1023|Cisco Systems|cisco
+US1912161007|Coca-Cola Co|CocaCola
+US2546871060|Walt Disney Disney|DisneyPictures
+US2635341090|Du Pont Nemours&amp;Co|Nemours
+US30231G1022|Exxon Mobil|exxonMobil
+US3696041033|General Electric|generalElectric
+US38141G1040|Goldman Sachs Group|goldmanSachs
+US4370761029|Home Depot|homeDepot
+US4581401001|Intel|intel
+US4592001014|IBM|ibm
+US46625H1005|JPMorgan Chase|jpmorgan
+US4781601046|Johnson &amp; Johnson|JNJNews
+US5801351017|McDonald's|MCDonalds
+US58933Y1055|Merck|merck
+US5949181045|Microsoft|microsoft
+US6541061031|Nike -B-|nike
+US7170811035|Pfizer|pfizer
+US7427181091|Procter&amp;Gamble|Procter_NGamble
+US88579Y1010|3M|3m
+US89417E1091|Travlr Comp|TRV_Insurance
+US9130171096|Utd Technologies|UTC
+US91324P1021|Unitedhealth Group|CEShealth
+US92343V1044|Verizon Comm|verizon
+US92826C8394|Visa-A|visa
+US9311421039|Wal-Mart Stores|walmart

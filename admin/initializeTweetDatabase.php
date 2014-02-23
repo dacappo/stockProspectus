@@ -11,7 +11,7 @@ array_push($sql, "DROP TABLE TweetTokens");
 array_push($sql, "DROP TABLE Tweets");
 array_push($sql, "DROP TABLE TweetSearch");
 array_push($sql, "CREATE TABLE TweetSearch(ISIN CHAR(12), Query VARCHAR(30), FOREIGN KEY (ISIN) REFERENCES Shares(ISIN))");
-array_push($sql, "CREATE TABLE Tweets(ID BIGINT NOT NULL UNIQUE PRIMARY KEY, ISIN CHAR(12), Retweets INT, Sentiment SMALLINT, FOREIGN KEY (ISIN) REFERENCES Shares(ISIN))");
+array_push($sql, "CREATE TABLE Tweets(ID BIGINT NOT NULL UNIQUE PRIMARY KEY, ISIN CHAR(12), Retweets INT, Tweet VARCHAR(160), Sentiment FLOAT, FOREIGN KEY (ISIN) REFERENCES Shares(ISIN))");
 array_push($sql, "CREATE TABLE TweetTokens(TweetID BIGINT, Token VARCHAR(30), FOREIGN KEY (TweetID) REFERENCES Tweets(ID))");
 
 // Execute queries
