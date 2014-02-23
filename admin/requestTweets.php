@@ -56,32 +56,39 @@ while ($row = $stmtQueries->fetch()) {
     /*
      *  Tweet loop
      */
+
     foreach ($content->{'statuses'} AS $status) {
-        $tweetID = $status->{'id'};
+        $tweetIdent = $status->{'id'};
+        $tweetID = intval($tweetIdent);
         $retweets = $status->{'retweet_count'};
         $tweet = $status->{'text'};
 
+        echo ("--- Tweet ". $tweetID ." ---<br>");
+
         if ($stmtTweet->execute()){
             echo "Query ran successfully: <span>" . $stmtTweet->queryString . "</span><br>";
+
+            $tweet = escapeTweet($tweet);
+            $tweet = filterWhiteSpaces($tweet);
+
+            $tokens = explode(" ", $tweet);
+
+            // Token lopp
+            foreach ($tokens AS $token) {
+                if (strlen($token) > 2) {
+                    if ($stmtToken->execute()){
+                        echo "Query ran successfully: <span>" . $stmtToken->queryString . " : " . $tweetID . " - " . $token . "</span><br>";
+                    } else {
+                        echo "Error running query: " . array_pop($stmtToken->errorInfo()) . " : <span>" . $stmtToken->queryString . "</span><br>";
+                    }
+                }
+            }
+
         } else {
             echo "Error running query: " . array_pop($stmtTweet->errorInfo()) . " : <span>" . $stmtTweet->queryString . "</span><br>";
         }
 
-        $tweet = escapeTweet($tweet);
-        $tweet = filterWhiteSpaces($tweet);
-
-        $tokens = explode(" ", $tweet);
-
-        // Token lopp
-        foreach ($tokens AS $token) {
-            if (strlen($token) > 2) {
-                if ($stmtToken->execute()){
-                    echo "Query ran successfully: <span>" . $stmtToken->queryString . " : " . $tweetID . " - " . $token . "</span><br>";
-                } else {
-                    echo "Error running query: " . array_pop($stmtToken->errorInfo()) . " : <span>" . $stmtToken->queryString . "</span><br>";
-                }
-            }
-        }
+        echo ("--- End tweet ---<br><br>");
     }
 }
 

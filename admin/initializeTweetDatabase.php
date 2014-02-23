@@ -42,4 +42,4 @@ file_put_contents($file, $string);
 echo "Query file written!";
 */
 
-mysqli_close($dbh);
+$dbh = null;
