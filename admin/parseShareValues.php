@@ -1818,8 +1818,10 @@ for($i = 0; $i < sizeof($ISINs) && $i < sizeof($Names) && $i < sizeof($Values); 
 
     $offset = 0;
     if ($stmt0->execute()){
-        $spreadh = $value - array_pop($stmt0->fetch()); // currency
-        if ($spreadh != $value) {
+        $response = $stmt0->fetch();
+
+        if ($response != false) {
+            $spreadh = $value - array_pop($response); // currency
             $spreadh = getPercentFromValues($value, $spreadh); // percentage
         } else {
             $spreadh = 9999.99;
@@ -1832,8 +1834,10 @@ for($i = 0; $i < sizeof($ISINs) && $i < sizeof($Names) && $i < sizeof($Values); 
 
     $offset = 24;
     if ($stmt0->execute()){
-        $spreadd = $value - array_pop($stmt0->fetch());
-        if ($spreadd != $value) {
+        $response = $stmt0->fetch();
+
+        if ($response != false) {
+            $spreadd = $value - array_pop($response);
             $spreadd = getPercentFromValues($value, $spreadd); // percentage
         } else {
             $spreadd = 9999.99;
@@ -1846,8 +1850,10 @@ for($i = 0; $i < sizeof($ISINs) && $i < sizeof($Names) && $i < sizeof($Values); 
 
     $offset = 168;
     if ($stmt0->execute()){
-        $spreadw = $value - array_pop($stmt0->fetch());
-        if ($spreadw != $value) {
+        $response = $stmt0->fetch();
+
+        if ($response != false) {
+            $spreadw = $value - array_pop($response);
             $spreadw = getPercentFromValues($value, $spreadw); // percentage
         } else {
             $spreadw = 9999.99;
@@ -1918,8 +1924,9 @@ for($i = 0; $i < sizeof($ISINs) && $i < sizeof($Names) && $i < sizeof($Values); 
 
     $offset = 0;
     if ($stmt0->execute()){
-        $spreadh = $value - array_pop($stmt0->fetch());
-        if ($spreadh != $value) {
+        $resposne = $stmt0->fetch();
+        if ($response != false) {
+            $spreadh = $value - array_pop($resposne);
             $spreadh = getPercentFromValues($value, $spreadh); // percentage
         } else {
             $spreadh = 9999.99;
@@ -1932,8 +1939,9 @@ for($i = 0; $i < sizeof($ISINs) && $i < sizeof($Names) && $i < sizeof($Values); 
 
     $offset = 24;
     if ($stmt0->execute()){
-        $spreadd = $value - array_pop($stmt0->fetch());
-        if ($spreadd != $value) {
+        $response = $stmt0->fetch();
+        if ($response != false) {
+            $spreadd = $value - array_pop($response);
             $spreadd = getPercentFromValues($value, $spreadd); // percentage
         } else {
             $spreadd = 9999.99;
@@ -1946,8 +1954,10 @@ for($i = 0; $i < sizeof($ISINs) && $i < sizeof($Names) && $i < sizeof($Values); 
 
     $offset = 168;
     if ($stmt0->execute()){
-        $spreadw = $value - array_pop($stmt0->fetch());
-        if ($spreadw != $value) {
+        $response = $stmt0->fetch();
+
+        if ($response != false) {
+            $spreadw = $value - array_pop($response);
             $spreadw = getPercentFromValues($value, $spreadw); // percentage
         } else {
             $spreadw = 9999.99;
