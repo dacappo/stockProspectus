@@ -4,19 +4,22 @@ include("../lib/databaseConnection.php");
 $dbh = connectToDatabase("localhost","dacappa","veryoftirjoicTeg3","dacappa_stockProspectus");
 
 // Get all tweet IDs
-$stmtTweetIDs = $dbh->prepare('SELECT DISTINCT ID FROM dacappa_stockProspectus.Tweets AS tw, dacappa_stockProspectus.TweetTokens AS tok WHERE tw.id = tok.TweetID');
+$stmtTweetIDs = $dbh->prepare('SELECT DISTINCT tw.TweetID, tw.ISIN FROM dacappa_stockProspectus.Tweets AS tw, dacappa_stockProspectus.TweetTokens AS tok WHERE tw.TweetID = tok.TweetID AND tw.ISIN = tok.ISIN');
 
 // Get sentiments of tokens contained in tweet
-$stmtTweetTokenSentiments = $dbh->prepare('SELECT AVG(Sentiment) AS Sentiment FROM dacappa_stockProspectus.TweetTokens AS Tok, dacappa_stockProspectus.SentimentValues AS Val WHERE TweetID = :tweetID AND Tok.Token = Val.Token');
+$stmtTweetTokenSentiments = $dbh->prepare('SELECT AVG(Sentiment) AS Sentiment FROM dacappa_stockProspectus.TweetTokens AS Tok, dacappa_stockProspectus.SentimentValues AS Val WHERE TweetID = :tweetID AND ISIN = :isin AND Tok.Token = Val.Token');
 $stmtTweetTokenSentiments->bindParam(':tweetID', $tweetID);
+$stmtTweetTokenSentiments->bindParam(':isin', $isin);
 
 // Get changing sentiment (not)
-$stmtTweetTokenChanger = $dbh->prepare('SELECT COUNT(Token) AS SumOfNot FROM TweetTokens WHERE (Token="not" OR Token="never") AND TweetID = :tweetID ');
+$stmtTweetTokenChanger = $dbh->prepare('SELECT COUNT(Token) AS SumOfNot FROM TweetTokens WHERE (Token="not" OR Token="never") AND TweetID = :tweetID AND ISIN = :isin ');
 $stmtTweetTokenChanger->bindParam(':tweetID', $tweetID);
+$stmtTweetTokenChanger->bindParam(':isin', $isin);
 
 /// Write sentiment of tweet
-$stmtSetTweetSentiment = $dbh->prepare('UPDATE Tweets SET Sentiment = :tweetSentiment WHERE ID = :tweetID');
+$stmtSetTweetSentiment = $dbh->prepare('UPDATE Tweets SET Sentiment = :tweetSentiment WHERE TweetID = :tweetID AND ISIN = :isin');
 $stmtSetTweetSentiment->bindParam(':tweetID', $tweetID);
+$stmtSetTweetSentiment->bindParam(':isin', $isin);
 $stmtSetTweetSentiment->bindParam(':tweetSentiment', $tweetSentiment);
 
 
@@ -43,7 +46,8 @@ if ($stmtTweetIDs->execute()){
 }
 
 while ($row = $stmtTweetIDs->fetch()) {
-    $tweetID = $row['ID'];
+    $tweetID = $row['TweetID'];
+    $isin = $row['ISIN'];
 
     if ($stmtTweetTokenSentiments->execute()){
         echo "Query ran successfully: <span>" . $stmtTweetTokenSentiments->queryString . "</span><br>";
