@@ -1804,9 +1804,9 @@ $stmt1->bindParam(':currency', $currency);
 $stmt1->bindParam(':index', $index);
 $stmt2->bindParam(':i', $isin);
 $stmt2->bindParam(':v', $value);
-$stmt2->bindParam(':sh', $spreadh);
-$stmt2->bindParam(':sd', $spreadd);
-$stmt2->bindParam(':sw', $spreadw);
+$stmt2->bindParam(':sh', $spreadHourly);
+$stmt2->bindParam(':sd', $spreadDaily);
+$stmt2->bindParam(':sw', $spreadWeekly);
 
 
 $currency = '€';
@@ -1823,14 +1823,14 @@ for($i = 0; $i < sizeof($ISINs) && $i < sizeof($Names) && $i < sizeof($Values); 
         $response = $stmt0->fetch();
 
         if ($response != false) {
-            $spreadh = $value - array_pop($response); // currency
-            $spreadh = getPercentFromValues($value, $spreadh); // percentage
+            $spreadHourly = $value - array_pop($response); // currency
+            $spreadHourly = getPercentFromValues($value, $spreadHourly); // percentage
         } else {
-            $spreadh = 9999.99;
+            $spreadHourly = 9999.99;
         }
         echo "Query ran successfully: <span>" . $stmt0->queryString . "</span><br>";
     } else {
-        $spreadh = 0;
+        $spreadHourly = 0;
         echo "Error running query: " . array_pop($stmt0->errorInfo()) . " : <span>" . $stmt0->queryString . "</span><br>";
     }
 
@@ -1839,14 +1839,14 @@ for($i = 0; $i < sizeof($ISINs) && $i < sizeof($Names) && $i < sizeof($Values); 
         $response = $stmt0->fetch();
 
         if ($response != false) {
-            $spreadd = $value - array_pop($response);
-            $spreadd = getPercentFromValues($value, $spreadd); // percentage
+            $spreadDaily = $value - array_pop($response);
+            $spreadDaily = getPercentFromValues($value, $spreadDaily); // percentage
         } else {
-            $spreadd = 9999.99;
+            $spreadDaily = 9999.99;
         }
         echo "Query ran successfully: <span>" . $stmt0->queryString . "</span><br>";
     } else {
-        $spreadd = 0;
+        $spreadDaily = 0;
         echo "Error running query: " . array_pop($stmt0->errorInfo()) . " : <span>" . $stmt0->queryString . "</span><br>";
     }
 
@@ -1855,14 +1855,14 @@ for($i = 0; $i < sizeof($ISINs) && $i < sizeof($Names) && $i < sizeof($Values); 
         $response = $stmt0->fetch();
 
         if ($response != false) {
-            $spreadw = $value - array_pop($response);
-            $spreadw = getPercentFromValues($value, $spreadw); // percentage
+            $spreadWeekly = $value - array_pop($response);
+            $spreadWeekly = getPercentFromValues($value, $spreadWeekly); // percentage
         } else {
-            $spreadw = 9999.99;
+            $spreadWeekly = 9999.99;
         }
         echo "Query ran successfully: <span>" . $stmt0->queryString . "</span><br>";
     } else {
-        $spreadw = 0;
+        $spreadWeekly = 0;
         echo "Error running query: " . array_pop($stmt0->errorInfo()) . " : <span>" . $stmt0->queryString . "</span><br>";
     }
 
@@ -1926,16 +1926,16 @@ for($i = 0; $i < sizeof($ISINs) && $i < sizeof($Names) && $i < sizeof($Values); 
 
     $offset = 0;
     if ($stmt0->execute()){
-        $resposne = $stmt0->fetch();
+        $response = $stmt0->fetch();
         if ($response != false) {
-            $spreadh = $value - array_pop($resposne);
-            $spreadh = getPercentFromValues($value, $spreadh); // percentage
+            $spreadHourly = $value - array_pop($response);
+            $spreadHourly = getPercentFromValues($value, $spreadHourly); // percentage
         } else {
-            $spreadh = 9999.99;
+            $spreadHourly = 9999.99;
         }
         echo "Query ran successfully: <span>" . $stmt0->queryString . "</span><br>";
     } else {
-        $spreadh = 0;
+        $spreadHourly = 0;
         echo "Error running query: " . array_pop($stmt0->errorInfo()) . " : <span>" . $stmt0->queryString . "</span><br>";
     }
 
@@ -1943,14 +1943,14 @@ for($i = 0; $i < sizeof($ISINs) && $i < sizeof($Names) && $i < sizeof($Values); 
     if ($stmt0->execute()){
         $response = $stmt0->fetch();
         if ($response != false) {
-            $spreadd = $value - array_pop($response);
-            $spreadd = getPercentFromValues($value, $spreadd); // percentage
+            $spreadDaily = $value - array_pop($response);
+            $spreadDaily = getPercentFromValues($value, $spreadDaily); // percentage
         } else {
-            $spreadd = 9999.99;
+            $spreadDaily = 9999.99;
         }
         echo "Query ran successfully: <span>" . $stmt0->queryString . "</span><br>";
     } else {
-        $spreadd = 0;
+        $spreadDaily = 0;
         echo "Error running query: " . array_pop($stmt0->errorInfo()) . " : <span>" . $stmt0->queryString . "</span><br>";
     }
 
@@ -1959,14 +1959,14 @@ for($i = 0; $i < sizeof($ISINs) && $i < sizeof($Names) && $i < sizeof($Values); 
         $response = $stmt0->fetch();
 
         if ($response != false) {
-            $spreadw = $value - array_pop($response);
-            $spreadw = getPercentFromValues($value, $spreadw); // percentage
+            $spreadWeekly = $value - array_pop($response);
+            $spreadWeekly = getPercentFromValues($value, $spreadWeekly); // percentage
         } else {
-            $spreadw = 9999.99;
+            $spreadWeekly = 9999.99;
         }
         echo "Query ran successfully: <span>" . $stmt0->queryString . "</span><br>";
     } else {
-        $spreadw = 0;
+        $spreadWeekly = 0;
         echo "Error running query: " . array_pop($stmt0->errorInfo()) . " : <span>" . $stmt0->queryString . "</span><br>";
     }
 

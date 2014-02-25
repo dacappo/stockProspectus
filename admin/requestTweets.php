@@ -44,13 +44,13 @@ if ($results = $stmtQueries->execute()){
 }
 
 while ($row = $stmtQueries->fetch()) {
-    $query = '@' .$row['Query'] . '-filter:retweets';
+    $query = '@' . $row['Query'] . '-filter:retweets';
     $isin = $row['ISIN'];
 
     // Twitter API call
     $start = microtime(true);
     $content = $connection->get('search/tweets', array('q' => $query,'lang' => 'en', 'result_type' => 'recent', 'count' => '100'));
-    echo "Fetch time: " . (microtime(true)-$start) . "<br>";
+    echo "Fetch time: " . (microtime(true)-$start) . " for @" . $row['Query'] . " <br>";
     echo "Server time: " . $content->{'search_metadata'}->{'completed_in'} . "<br><br>";
 
     /*
