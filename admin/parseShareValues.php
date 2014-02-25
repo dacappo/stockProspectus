@@ -1750,6 +1750,8 @@ function connectToDatabase($server, $user, $password, $database) {
     return $dbh;
 }
 
+//TODO: Outsource parsing and DB connection to corresponding scripts -> test on run-when
+
 function getPercentFromValues($value, $spread) {
     return round(($spread/($value-$spread))*100,2);
 }

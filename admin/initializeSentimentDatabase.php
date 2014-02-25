@@ -6,8 +6,8 @@ echo "<style>body{font-family: Verdana, Geneva, sans-serif; font-size: 12px;} sp
 $dbh = connectToDatabase("localhost","dacappa","veryoftirjoicTeg3","dacappa_stockProspectus");
 
 $sql = array();
-array_push($sql, "DROP TABLE SentimentValues");
-array_push($sql, "DROP TABLE Prospectus");
+array_push($sql, "DROP TABLE IF EXISTS SentimentValues");
+array_push($sql, "DROP TABLE IF EXISTS Prospectus");
 array_push($sql, "CREATE TABLE SentimentValues(Token VARCHAR(30) NOT NULL UNIQUE PRIMARY KEY, Sentiment FLOAT)");
 array_push($sql, "CREATE TABLE Prospectus(ISIN CHAR(12), Sentiment FLOAT, FOREIGN KEY (ISIN) REFERENCES Shares(ISIN))");
 
