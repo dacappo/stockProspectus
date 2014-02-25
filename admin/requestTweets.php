@@ -58,8 +58,8 @@ while ($row = $stmtQueries->fetch()) {
      */
 
     foreach ($content->{'statuses'} AS $status) {
-        $tweetIdent = $status->{'id'};
-        $tweetID = intval($tweetIdent);
+        $tweetIdent = $status->{'id_str'}; // Take id_str, because id s are bigger than common int in php -> db (BIGINT)
+        $tweetID = $tweetIdent;
         $retweets = $status->{'retweet_count'};
         $tweet = $status->{'text'};
 
