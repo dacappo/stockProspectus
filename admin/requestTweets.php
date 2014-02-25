@@ -28,8 +28,9 @@ $stmtTweet->bindParam(':createdAt', $createdAt);
 $stmtTweet->bindParam(':retweets', $retweets);
 $stmtTweet->bindParam(':tweet', $tweet);
 
-$stmtToken = $dbh->prepare('INSERT INTO TweetTokens VALUES (:tweetID, :token)');
+$stmtToken = $dbh->prepare('INSERT INTO TweetTokens VALUES (:tweetID, :isin, :token)');
 $stmtToken->bindParam(':token', $token);
+$stmtToken->bindParam(':isin', $isin);
 $stmtToken->bindParam(':tweetID', $tweetID);
 
 

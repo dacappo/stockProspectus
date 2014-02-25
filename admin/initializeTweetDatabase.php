@@ -11,8 +11,8 @@ array_push($sql, "DROP TABLE IF EXISTS TweetTokens");
 array_push($sql, "DROP TABLE IF EXISTS Tweets");
 array_push($sql, "DROP TABLE IF EXISTS TweetSearch");
 array_push($sql, "CREATE TABLE TweetSearch(ISIN CHAR(12), Query VARCHAR(30), FOREIGN KEY (ISIN) REFERENCES Shares(ISIN))");
-array_push($sql, "CREATE TABLE Tweets(ID BIGINT NOT NULL UNIQUE PRIMARY KEY, ISIN CHAR(12), Timestamp TIMESTAMP NOT NULL, Retweets INT, Tweet VARCHAR(160), Sentiment FLOAT, FOREIGN KEY (ISIN) REFERENCES Shares(ISIN))");
-array_push($sql, "CREATE TABLE TweetTokens(TweetID BIGINT, Token VARCHAR(30), FOREIGN KEY (TweetID) REFERENCES Tweets(ID))");
+array_push($sql, "CREATE TABLE Tweets(TweetID BIGINT NOT NULL, ISIN CHAR(12), Timestamp TIMESTAMP NOT NULL, Retweets INT, Tweet VARCHAR(160), Sentiment FLOAT,  PRIMARY KEY(TweetID,  ISIN), FOREIGN KEY (ISIN) REFERENCES Shares(ISIN))");
+array_push($sql, "CREATE TABLE TweetTokens(TweetID BIGINT, ISIN CHAR(12), Token VARCHAR(30), FOREIGN KEY (TweetID, ISIN) REFERENCES Tweets(TweetID, ISIN))");
 
 // Execute queries
 foreach ($sql as $statement) {

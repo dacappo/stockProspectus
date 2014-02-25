@@ -83,14 +83,14 @@ body {
             <!-- Table -->
             <table id="options-table" class="table table-hover">
                 <tr><th>Action</th><th>Link</th></tr>
-                <tr><td>Reset share tables</td><td><a href="initializeShareDatabase.php" ><span class="label label-danger">initializeShareDatabase.php</span></a></td></tr>
-                <tr><td>Parse current share values</td><td><a href="parseShareValues.php" ><span class="label label-danger">parseShareValues.php</span></a></td></tr>
-                <tr><td>Reset tweet tables</td><td><a href="initializeTweetDatabase.php" ><span class="label label-danger">initializeTweetDatabase.php</span></a></td></tr>
-                <tr><td>Parse twitter queries (search.txt)</td><td><a href="parseTweetQueries.php" ><span class="label label-danger">parseTweetQueries.php</span></a></td></tr>
-                <tr><td>Request current tweets (Twitter API)</td><td><a href="requestTweets.php" ><span class="label label-danger">requestTweets.php</span></a></td></tr>
-                <tr><td>Reset sentiment tables</td><td><a href="initializeSentimentDatabase.php" ><span class="label label-danger">initializeSentimentDatabase.php</span></a></td></tr>
-                <tr><td>Parse sentiment ranking (afinn.txt)</td><td><a href="parseSentimentRanking.php" ><span class="label label-danger">parseSentimentRanking.php</span></a></td></tr>
-                <tr><td>Calculate sentiment for tweets and prospectus for shares</td><td><a href="calculateProspectus.php" ><span class="label label-danger">calculateProspectus.php</span></a></td></tr>
+                <tr><td>Reset share tables</td><td><a href="initializeShareDatabase.php" target="_blank"><span class="label label-danger">initializeShareDatabase.php</span></a></td></tr>
+                <tr><td>Parse current share values</td><td><a href="parseShareValues.php" target="_blank"><span class="label label-danger">parseShareValues.php</span></a></td></tr>
+                <tr><td>Reset tweet tables</td><td><a href="initializeTweetDatabase.php" target="_blank"><span class="label label-danger">initializeTweetDatabase.php</span></a></td></tr>
+                <tr><td>Parse twitter queries (search.txt)</td><td><a href="parseTweetQueries.php" target="_blank"><span class="label label-danger">parseTweetQueries.php</span></a></td></tr>
+                <tr><td>Request current tweets (Twitter API)</td><td><a href="requestTweets.php" target="_blank"><span class="label label-danger">requestTweets.php</span></a></td></tr>
+                <tr><td>Reset sentiment tables</td><td><a href="initializeSentimentDatabase.php" target="_blank"><span class="label label-danger">initializeSentimentDatabase.php</span></a></td></tr>
+                <tr><td>Parse sentiment ranking (afinn.txt)</td><td><a href="parseSentimentRanking.php" target="_blank"><span class="label label-danger">parseSentimentRanking.php</span></a></td></tr>
+                <tr><td>Calculate sentiment for tweets and prospectus for shares</td><td><a href="calculateProspectus.php" target="_blank"><span class="label label-danger">calculateProspectus.php</span></a></td></tr>
             </table>
             </div></div>
 
