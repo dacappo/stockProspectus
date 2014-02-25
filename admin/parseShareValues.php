@@ -1794,7 +1794,7 @@ $dbh = connectToDatabase("localhost","dacappa","veryoftirjoicTeg3","dacappa_stoc
 
 $stmt0 = $dbh->prepare("SELECT ShareValues.Value FROM ShareValues WHERE ShareValues.ISIN = :i ORDER BY ShareValues.Timestamp DESC LIMIT 1 OFFSET :off");
 $stmt1 = $dbh->prepare("INSERT INTO Shares(ISIN, Name, Currency, StockIndex) VALUES (:i, :n,:currency, :index) ON DUPLICATE KEY UPDATE ISIN = ISIN");
-$stmt2 = $dbh->prepare('INSERT INTO ShareValues VALUES (:i, CURRENT_TIMESTAMP, :v, :sh, :sd, :sw)');
+$stmt2 = $dbh->prepare('INSERT INTO ShareValues VALUES (:i, FROM_UNIXTIME(' . time() . '), :v, :sh, :sd, :sw)');
 
 $stmt0->bindParam(':i', $isin);
 $stmt0->bindParam(':off', $offset);

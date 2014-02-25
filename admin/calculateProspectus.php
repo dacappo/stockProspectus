@@ -1,7 +1,7 @@
 <?php
 include("../lib/databaseConnection.php");
 
-$periodForProspectus = 1; //TODO: Get parameter for 1 hour, 24 hours, 168 hours
+$periodForProspectus = $_GET['period'];
 
 $dbh = connectToDatabase("localhost","dacappa","veryoftirjoicTeg3","dacappa_stockProspectus");
 
@@ -26,14 +26,16 @@ $stmtSetTweetSentiment->bindParam(':tweetSentiment', $tweetSentiment);
 
 
 // Get all ISINs with tweets
-$stmtGetISINs = $dbh->prepare('SELECT Distinct(Sha.ISIN) FROM dacappa_stockProspectus.Shares AS Sha, dacappa_stockProspectus.Tweets AS Twe WHERE Sha.ISIN = Twe.ISIN');
+$stmtGetISINs = $dbh->prepare('SELECT Distinct(Sha.ISIN) FROM dacappa_stockProspectus.Shares AS Sha, dacappa_stockProspectus.Tweets AS Twe WHERE Sha.ISIN = Twe.ISIN AND DATE_ADD(Timestamp, INTERVAL :period HOUR) >= NOW()');
+$stmtGetISINs->bindParam(':period', $periodForProspectus);
 
 // Get sentiments of tweets for every single ISIN
-$stmtGetShareTweets = $dbh->prepare('SELECT Sentiment, Retweets FROM dacappa_stockProspectus.Tweets WHERE Tweets.ISIN = :isin');
+$stmtGetShareTweets = $dbh->prepare('SELECT Sentiment, Retweets FROM dacappa_stockProspectus.Tweets WHERE Tweets.ISIN = :isin AND DATE_ADD(Timestamp, INTERVAL :period HOUR) >= NOW()');
 $stmtGetShareTweets->bindParam(':isin', $ISIN);
+$stmtGetShareTweets->bindParam(':period', $periodForProspectus);
 
 // Write prospectus for share
-$stmtWriteProspectus = $dbh->prepare('INSERT INTO dacappa_stockProspectus.Prospectus VALUES(:isin, :prospectus, CURRENT_TIMESTAMP, :period)');
+$stmtWriteProspectus = $dbh->prepare('INSERT INTO dacappa_stockProspectus.Prospectus VALUES(:isin, :prospectus, FROM_UNIXTIME(' . time() . '), :period)');
 $stmtWriteProspectus->bindParam(':isin', $ISIN);
 $stmtWriteProspectus->bindParam(':prospectus', $prospectus);
 $stmtWriteProspectus->bindParam(':period', $periodForProspectus);
@@ -42,6 +44,7 @@ $stmtWriteProspectus->bindParam(':period', $periodForProspectus);
 /*
  * Calculate tweet sentiments
  */
+// TODO: Tweet sentiment calculation outsourcing -> extra script
 if ($stmtTweetIDs->execute()){
     echo "Query ran successfully: <span>" . $stmtTweetIDs->queryString . "</span><br>";
 } else {
@@ -93,6 +96,8 @@ if ($stmtGetISINs->execute()){
     echo "Error running query: " . array_pop($stmtGetISINs->errorInfo()) . " : <span>" . $stmtGetISINs->queryString . "</span><br>";
 }
 
+$prospectusEntries = array();
+
 while ($row = $stmtGetISINs->fetch()) {
     $ISIN = $row['ISIN'];
     echo $ISIN . "<br>";
@@ -102,23 +107,45 @@ while ($row = $stmtGetISINs->fetch()) {
         echo "Error running query: " . array_pop($stmtGetShareTweets->errorInfo()) . " : <span>" . $stmtGetShareTweets->queryString . "</span><br>";
     }
 
+    // calculate number of retweets
     $prospectus = 0;
     $divider = 0;
     while ($rowTweet = $stmtGetShareTweets->fetch()) {
-        $prospectus += ($rowTweet['Sentiment'] * ($rowTweet['Retweets'] +1));
+        $prospectus += ($rowTweet['Sentiment'] * ( 1 + $rowTweet['Retweets']));
         $divider += 1 + $rowTweet['Retweets'];
     }
 
-    $prospectus = round(($prospectus/$divider),2);
+    $prospectus = round(($prospectus/$divider),3);
+
+    array_push($prospectusEntries, array('ISIN' => $ISIN, 'Prospectus' => $prospectus));
+}
+
+//TODO: Filter Prospectus with to less tweets
+//TODO: Prospectus calculation in relation to overall sentiment of share tweets -> sometime general positive sentiment
+
+// Write prospectus to database & perform some optimization
+
+foreach ($prospectusEntries AS $entry) {
+
+    $ISIN = $entry['ISIN'];
+    $prospectus = $entry['Prospectus'];
+    $prospectus = $prospectus - averageProspectus($prospectusEntries); //TODO: Value can become >1 or <-1
 
     if ($stmtWriteProspectus->execute()){
         echo "Query ran successfully: <span>" . $stmtWriteProspectus->queryString . "</span><br>";
     } else {
         echo "Error running query: " . array_pop($stmtWriteProspectus->errorInfo()) . " : <span>" . $stmtWriteProspectus->queryString . "</span><br>";
     }
-
 }
 
 function average($array) {
     return array_sum($array) / count($array);
+}
+
+function averageProspectus($array){
+    $sum = 0;
+    foreach ($array as $entry) {
+        $sum += $entry['Prospectus'];
+    }
+    return round($sum / count($array),3);
 }

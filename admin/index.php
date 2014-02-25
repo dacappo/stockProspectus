@@ -90,7 +90,12 @@ body {
                 <tr><td>Request current tweets (Twitter API)</td><td><a href="requestTweets.php" target="_blank"><span class="label label-danger">requestTweets.php</span></a></td></tr>
                 <tr><td>Reset sentiment tables</td><td><a href="initializeSentimentDatabase.php" target="_blank"><span class="label label-danger">initializeSentimentDatabase.php</span></a></td></tr>
                 <tr><td>Parse sentiment ranking (afinn.txt)</td><td><a href="parseSentimentRanking.php" target="_blank"><span class="label label-danger">parseSentimentRanking.php</span></a></td></tr>
-                <tr><td>Calculate sentiment for tweets and prospectus for shares</td><td><a href="calculateProspectus.php" target="_blank"><span class="label label-danger">calculateProspectus.php</span></a></td></tr>
+                <tr><td>Calculate sentiment for tweets and prospectus for shares</td><td>
+                        <a href="calculateProspectus.php?period=1" target="_blank"><span class="label label-danger">calculateProspectus.php/1</span></a>
+                        <a href="calculateProspectus.php?period=24" target="_blank"><span class="label label-danger">/24</span></a>
+                        <a href="calculateProspectus.php?period=168" target="_blank"><span class="label label-danger">/168</span></a>
+                    </td
+                </tr>
             </table>
             </div></div>
 
