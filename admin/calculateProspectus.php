@@ -1,6 +1,8 @@
 <?php
 include("../lib/databaseConnection.php");
 
+$periodForProspectus = 1; //TODO: Get parameter for 1 hour, 24 hours, 168 hours
+
 $dbh = connectToDatabase("localhost","dacappa","veryoftirjoicTeg3","dacappa_stockProspectus");
 
 // Get all tweet IDs
@@ -31,9 +33,10 @@ $stmtGetShareTweets = $dbh->prepare('SELECT Sentiment, Retweets FROM dacappa_sto
 $stmtGetShareTweets->bindParam(':isin', $ISIN);
 
 // Write prospectus for share
-$stmtWriteProspectus = $dbh->prepare('INSERT INTO dacappa_stockProspectus.Prospectus VALUES(:isin, :prospectus)');
+$stmtWriteProspectus = $dbh->prepare('INSERT INTO dacappa_stockProspectus.Prospectus VALUES(:isin, :prospectus, CURRENT_TIMESTAMP, :period)');
 $stmtWriteProspectus->bindParam(':isin', $ISIN);
 $stmtWriteProspectus->bindParam(':prospectus', $prospectus);
+$stmtWriteProspectus->bindParam(':period', $periodForProspectus);
 
 
 /*

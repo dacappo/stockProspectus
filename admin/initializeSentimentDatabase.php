@@ -9,7 +9,7 @@ $sql = array();
 array_push($sql, "DROP TABLE IF EXISTS SentimentValues");
 array_push($sql, "DROP TABLE IF EXISTS Prospectus");
 array_push($sql, "CREATE TABLE SentimentValues(Token VARCHAR(30) NOT NULL UNIQUE PRIMARY KEY, Sentiment FLOAT)");
-array_push($sql, "CREATE TABLE Prospectus(ISIN CHAR(12), Sentiment FLOAT, FOREIGN KEY (ISIN) REFERENCES Shares(ISIN))");
+array_push($sql, "CREATE TABLE Prospectus(ISIN CHAR(12), Sentiment FLOAT, Timestamp TIMESTAMP, Hours SMALLINT , FOREIGN KEY (ISIN) REFERENCES Shares(ISIN))");
 
 // Execute queries
 foreach ($sql as $statement) {

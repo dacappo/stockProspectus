@@ -21,6 +21,9 @@ $dbh = connectToDatabase("localhost","dacappa","veryoftirjoicTeg3","dacappa_stoc
 
 $stmtQueries = $dbh->prepare('SELECT Shares.ISIN, TweetSearch.Query FROM Shares, TweetSearch WHERE Shares.ISIN = TweetSearch.ISIN');
 
+$stmtLatestTweet = $dbh->prepare('SELECT TweetID FROM Tweets WHERE ISIN = :isin ORDER BY TweetID DESC LIMIT 1;');
+$stmtLatestTweet->bindParam(':isin', $isin);
+
 $stmtTweet = $dbh->prepare('INSERT INTO Tweets VALUES(:tweetID, :isin, FROM_UNIXTIME(:createdAt), :retweets,:tweet, 0)');
 $stmtTweet->bindParam(':tweetID', $tweetID);
 $stmtTweet->bindParam(':isin', $isin);
@@ -49,9 +52,18 @@ while ($row = $stmtQueries->fetch()) {
     $query = '@' . $row['Query'] . '-filter:retweets';
     $isin = $row['ISIN'];
 
+    // Get latest tweet ID -> less load for json
+    if ($stmtLatestTweet->execute()){
+        echo "Query ran successfully: <span>" . $stmtLatestTweet->queryString . "</span><br>";
+    } else {
+        echo "Error running query: " . array_pop($stmtLatestTweet->errorInfo()) . " : <span>" . $stmtLatestTweet->queryString . "</span><br>";
+    }
+
+    $latestTweetId = $stmtLatestTweet->fetch()['TweetID'];
+
     // Twitter API call
     $start = microtime(true);
-    $content = $connection->get('search/tweets', array('q' => $query,'lang' => 'en', 'result_type' => 'recent', 'count' => '100'));
+    $content = $connection->get('search/tweets', array('q' => $query,'lang' => 'en', 'result_type' => 'recent', 'count' => '100' , 'since_id' => $latestTweetId));
     echo "Fetch time: " . (microtime(true)-$start) . " for @" . $row['Query'] . " <br>";
     echo "Server time: " . $content->{'search_metadata'}->{'completed_in'} . "<br><br>";
 
