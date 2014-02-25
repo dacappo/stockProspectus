@@ -21,9 +21,10 @@ $dbh = connectToDatabase("localhost","dacappa","veryoftirjoicTeg3","dacappa_stoc
 
 $stmtQueries = $dbh->prepare('SELECT Shares.ISIN, TweetSearch.Query FROM Shares, TweetSearch WHERE Shares.ISIN = TweetSearch.ISIN');
 
-$stmtTweet = $dbh->prepare('INSERT INTO Tweets VALUES(:tweetID, :isin,:retweets,:tweet, 0)');
+$stmtTweet = $dbh->prepare('INSERT INTO Tweets VALUES(:tweetID, :isin, FROM_UNIXTIME(:createdAt), :retweets,:tweet, 0)');
 $stmtTweet->bindParam(':tweetID', $tweetID);
 $stmtTweet->bindParam(':isin', $isin);
+$stmtTweet->bindParam(':createdAt', $createdAt);
 $stmtTweet->bindParam(':retweets', $retweets);
 $stmtTweet->bindParam(':tweet', $tweet);
 
@@ -58,8 +59,8 @@ while ($row = $stmtQueries->fetch()) {
      */
 
     foreach ($content->{'statuses'} AS $status) {
-        $tweetIdent = $status->{'id_str'}; // Take id_str, because id s are bigger than common int in php -> db (BIGINT)
-        $tweetID = $tweetIdent;
+        $tweetID = $status->{'id_str'}; // Take id_str, because id s are bigger than common int in php -> db (BIGINT)
+        $createdAt = strtotime($status->{'created_at'});
         $retweets = $status->{'retweet_count'};
         $tweet = $status->{'text'};
 
