@@ -133,26 +133,32 @@ $avgSpreadH;
 $avgSpreadD;
 $avgSpreadW;
 
-
-if ($index == "dax") {
-    $avgQuery = "SELECT AVG(SpreadH) AS SpreadH, AVG(SpreadD) AS SpreadD, AVG(SpreadW) AS SpreadW FROM(SELECT ShareValues.SpreadH AS SpreadH, ShareValues.SpreadD AS SpreadD, ShareValues.SpreadW AS SpreadW FROM Shares, ShareValues WHERE Shares.ISIN = ShareValues.ISIN AND Shares.StockIndex = 'DAX' ORDER BY ShareValues.Timestamp DESC LIMIT 30) AS result";
-} else if ($index == "dj") {
-    $avgQuery = "SELECT AVG(SpreadH) AS SpreadH, AVG(SpreadD) AS SpreadD, AVG(SpreadW) AS SpreadW FROM(SELECT ShareValues.SpreadH AS SpreadH, ShareValues.SpreadD AS SpreadD, ShareValues.SpreadW AS SpreadW FROM Shares, ShareValues WHERE Shares.ISIN = ShareValues.ISIN AND Shares.StockIndex = 'DJ' ORDER BY ShareValues.Timestamp DESC LIMIT 30) AS result";
-} else {
-    $avgQuery = "SELECT AVG(SpreadH) AS SpreadH, AVG(SpreadD) AS SpreadD, AVG(SpreadW) AS SpreadW FROM(SELECT ShareValues.SpreadH AS SpreadH, ShareValues.SpreadD AS SpreadD, ShareValues.SpreadW AS SpreadW FROM Shares, ShareValues WHERE Shares.ISIN = ShareValues.ISIN AND Shares.StockIndex = 'DAX' ORDER BY ShareValues.Timestamp DESC LIMIT 30) AS result";
-}
-
 if ($index == "dax") {
     $query = "SELECT * FROM (SELECT Shares.Name, Shares.ISIN, ShareValues.Value, ShareValues.SpreadH, ShareValues.SpreadD, ShareValues.SpreadW, ShareValues.Timestamp, Shares.Currency FROM Shares, ShareValues WHERE Shares.ISIN = ShareValues.ISIN AND Shares.StockIndex = 'DAX' ORDER BY ShareValues.Timestamp DESC LIMIT 30) AS result ORDER BY Name";
+    $avgQuery = "SELECT AVG(SpreadH) AS SpreadH, AVG(SpreadD) AS SpreadD, AVG(SpreadW) AS SpreadW FROM(SELECT ShareValues.SpreadH AS SpreadH, ShareValues.SpreadD AS SpreadD, ShareValues.SpreadW AS SpreadW FROM Shares, ShareValues WHERE Shares.ISIN = ShareValues.ISIN AND Shares.StockIndex = 'DAX' ORDER BY ShareValues.Timestamp DESC LIMIT 30) AS result";
+    $prospectus1Query = "SELECT * FROM (SELECT Name, Sentiment FROM dacappa_stockprospectus.prospectus AS pro, dacappa_stockprospectus.shares AS sha WHERE sha.ISIN = pro.isin AND sha.StockIndex = 'DAX' AND pro.Period = 1 ORDER BY Timestamp DESC LIMIT 30) AS Tab ORDER BY Name";
+    $prospectus24Query = "SELECT * FROM (SELECT Name, Sentiment FROM dacappa_stockprospectus.prospectus AS pro, dacappa_stockprospectus.shares AS sha WHERE sha.ISIN = pro.isin AND sha.StockIndex = 'DAX' AND pro.Period = 24 ORDER BY Timestamp DESC LIMIT 30) AS Tab ORDER BY Name";
+    $prospectus168Query = "SELECT * FROM (SELECT Name, Sentiment FROM dacappa_stockprospectus.prospectus AS pro, dacappa_stockprospectus.shares AS sha WHERE sha.ISIN = pro.isin AND sha.StockIndex = 'DAX' AND pro.Period = 168 ORDER BY Timestamp DESC LIMIT 30) AS Tab ORDER BY Name";
 } else if ($index == "dj") {
     $query = "SELECT * FROM (SELECT Shares.Name, Shares.ISIN, ShareValues.Value, ShareValues.SpreadH, ShareValues.SpreadD, ShareValues.SpreadW, ShareValues.Timestamp, Shares.Currency FROM Shares, ShareValues WHERE Shares.ISIN = ShareValues.ISIN AND Shares.StockIndex = 'DJ' ORDER BY ShareValues.Timestamp DESC LIMIT 30) AS result ORDER BY Name";
+    $avgQuery = "SELECT AVG(SpreadH) AS SpreadH, AVG(SpreadD) AS SpreadD, AVG(SpreadW) AS SpreadW FROM(SELECT ShareValues.SpreadH AS SpreadH, ShareValues.SpreadD AS SpreadD, ShareValues.SpreadW AS SpreadW FROM Shares, ShareValues WHERE Shares.ISIN = ShareValues.ISIN AND Shares.StockIndex = 'DJ' ORDER BY ShareValues.Timestamp DESC LIMIT 30) AS result";
+    $prospectus1Query = "SELECT * FROM (SELECT Name, Sentiment FROM dacappa_stockprospectus.prospectus AS pro, dacappa_stockprospectus.shares AS sha WHERE sha.ISIN = pro.isin AND sha.StockIndex = 'DJ' AND pro.Period = 1 ORDER BY Timestamp DESC LIMIT 30) AS Tab ORDER BY Name";
+    $prospectus24Query = "SELECT * FROM (SELECT Name, Sentiment FROM dacappa_stockprospectus.prospectus AS pro, dacappa_stockprospectus.shares AS sha WHERE sha.ISIN = pro.isin AND sha.StockIndex = 'DJ' AND pro.Period = 24 ORDER BY Timestamp DESC LIMIT 30) AS Tab ORDER BY Name";
+    $prospectus168Query = "SELECT * FROM (SELECT Name, Sentiment FROM dacappa_stockprospectus.prospectus AS pro, dacappa_stockprospectus.shares AS sha WHERE sha.ISIN = pro.isin AND sha.StockIndex = 'DJ' AND pro.Period = 168 ORDER BY Timestamp DESC LIMIT 30) AS Tab ORDER BY Name";
 } else {
     $query = "SELECT * FROM (SELECT Shares.Name, Shares.ISIN, ShareValues.Value, ShareValues.SpreadH, ShareValues.SpreadD, ShareValues.SpreadW, ShareValues.Timestamp, Shares.Currency FROM Shares, ShareValues WHERE Shares.ISIN = ShareValues.ISIN AND Shares.StockIndex = 'DAX' ORDER BY ShareValues.Timestamp DESC LIMIT 30) AS result ORDER BY Name";
+    $avgQuery = "SELECT AVG(SpreadH) AS SpreadH, AVG(SpreadD) AS SpreadD, AVG(SpreadW) AS SpreadW FROM(SELECT ShareValues.SpreadH AS SpreadH, ShareValues.SpreadD AS SpreadD, ShareValues.SpreadW AS SpreadW FROM Shares, ShareValues WHERE Shares.ISIN = ShareValues.ISIN AND Shares.StockIndex = 'DAX' ORDER BY ShareValues.Timestamp DESC LIMIT 30) AS result";
+    $prospectus1Query = "SELECT * FROM (SELECT Name, Sentiment FROM dacappa_stockprospectus.prospectus AS pro, dacappa_stockprospectus.shares AS sha WHERE sha.ISIN = pro.isin AND sha.StockIndex = 'DAX' AND pro.Period = 1 ORDER BY Timestamp DESC LIMIT 30) AS Tab ORDER BY Name";
+    $prospectus24Query = "SELECT * FROM (SELECT Name, Sentiment FROM dacappa_stockprospectus.prospectus AS pro, dacappa_stockprospectus.shares AS sha WHERE sha.ISIN = pro.isin AND sha.StockIndex = 'DAX' AND pro.Period = 24 ORDER BY Timestamp DESC LIMIT 30) AS Tab ORDER BY Name";
+    $prospectus168Query = "SELECT * FROM (SELECT Name, Sentiment FROM dacappa_stockprospectus.prospectus AS pro, dacappa_stockprospectus.shares AS sha WHERE sha.ISIN = pro.isin AND sha.StockIndex = 'DAX' AND pro.Period = 168 ORDER BY Timestamp DESC LIMIT 30) AS Tab ORDER BY Name";
 }
 
 $con = connectToDB("localhost","dacappa","veryoftirjoicTeg3","dacappa_stockProspectus");
 $avgResult = mysqli_query($con,$avgQuery);
 $result = mysqli_query($con,$query);
+$prospectus1Result = mysqli_query($con,$prospectus1Query);
+$prospectus24Result = mysqli_query($con,$prospectus24Query);
+$prospectus168Result = mysqli_query($con,$prospectus168Query);
 mysqli_close($con);
 
 while($row = mysqli_fetch_array($avgResult)){
@@ -164,6 +170,11 @@ while($row = mysqli_fetch_array($avgResult)){
 $timeStamp = "Something went wrong!";
 
 while($row = mysqli_fetch_array($result)){
+
+    $prospectus1 = mysqli_fetch_array($prospectus1Result)['Sentiment'];
+    $prospectus24 = mysqli_fetch_array($prospectus24Result)['Sentiment'];
+    $prospectus168 = mysqli_fetch_array($prospectus168Result)['Sentiment'];
+
     $timeStamp = $row['Timestamp'];
     echo '<tr>';
     echo '<td>' . $row['Name'] . '</td>';
@@ -171,9 +182,17 @@ while($row = mysqli_fetch_array($result)){
 
     if ($row['SpreadH'] != 9999.99) {
         if ($row['SpreadH'] >= $avgSpreadH) {
-            echo '<td class="price positive">' . $row['SpreadH'] . '%' .  '</td>';
+            if($prospectus1 >= 0) {
+                echo '<td class="price positive">' . $row['SpreadH'] . '% ' .  '<span class="positive glyphicon glyphicon-arrow-up"></span></td>';
+            } else {
+                echo '<td class="price positive">' . $row['SpreadH'] . '% ' .  '<span class="negative glyphicon glyphicon-arrow-down"></span></td>';
+            }
         } else {
-            echo '<td class="price negative">' . $row['SpreadH'] . '%' .  '</td>';
+            if($prospectus1 >= 0) {
+                echo '<td class="price negative">' . $row['SpreadH'] . '% ' .  '<span class=" positive glyphicon glyphicon-arrow-up"></span></td>';
+            } else {
+                echo '<td class="price negative">' . $row['SpreadH'] . '% ' .  '<span class=" negative glyphicon glyphicon-arrow-down"></span></td>';
+            }
         }
     } else {
         echo '<td class="price">-</td>';
@@ -181,9 +200,17 @@ while($row = mysqli_fetch_array($result)){
 
     if ($row['SpreadD'] != 9999.99) {
         if ($row['SpreadD'] >= $avgSpreadD) {
-            echo '<td class="hidden-xs price positive">' . $row['SpreadD'] . '%' . '</td>';
+            if($prospectus24 >= 0) {
+                echo '<td class="hidden-xs price positive">' . $row['SpreadD'] . '% ' . '<span class="positive glyphicon glyphicon-arrow-up"></span></td>';
+            } else {
+                echo '<td class="hidden-xs price positive">' . $row['SpreadD'] . '% ' . '<span class="negative glyphicon glyphicon-arrow-down"></span></td>';
+            }
         } else {
-            echo '<td class="hidden-xs price negative">' . $row['SpreadD'] . '%' . '</td>';
+            if($prospectus24 >= 0) {
+                echo '<td class="hidden-xs price negative">' . $row['SpreadD'] . '% ' . '<span class=" positive glyphicon glyphicon-arrow-up"></span></td>';
+            } else {
+                echo '<td class="hidden-xs price negative">' . $row['SpreadD'] . '% ' . '<span class=" negative glyphicon glyphicon-arrow-down"></span></td>';
+            }
         }
     } else {
         echo '<td class="hidden-xs price">-</td>';
@@ -191,11 +218,18 @@ while($row = mysqli_fetch_array($result)){
 
     if ($row['SpreadW'] != 9999.99) {
         if ($row['SpreadW'] >= $avgSpreadW) {
-            echo '<td class="price hidden-xs positive" >' . $row['SpreadW'] . '%' .  '</td>';
+            if($prospectus168 >= 0) {
+                echo '<td class="price hidden-xs positive" >' . $row['SpreadW'] . '%' .  '<span class="positive glyphicon glyphicon-arrow-up"></span></td>';
+            }else {
+                echo '<td class="price hidden-xs positive" >' . $row['SpreadW'] . '%' .  '<span class="negative glyphicon glyphicon-arrow-down"></span></td>';
+            }
         } else {
-            echo '<td class="price hidden-xs negative" >' . $row['SpreadW'] . '%' .  '</td>';
+            if($prospectus168 >= 0) {
+                echo '<td class="price hidden-xs negative" >' . $row['SpreadW'] . '%' .  '<span class=" positive glyphicon glyphicon-arrow-up"></span></td>';
+            } else {
+                echo '<td class="price hidden-xs negative" >' . $row['SpreadW'] . '%' .  '<span class=" negative glyphicon glyphicon-arrow-down"></span></td>';
+            }
         }
-
     } else {
         echo '<td class="hidden-xs price">-</td>';
     }
