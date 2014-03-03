@@ -8,8 +8,10 @@ $dbh = connectToDatabase("localhost","dacappa","veryoftirjoicTeg3","dacappa_stoc
 $sql = array();
 array_push($sql, "DROP TABLE IF EXISTS SentimentValues");
 array_push($sql, "DROP TABLE IF EXISTS Prospectus");
+array_push($sql, "DROP TABLE IF EXISTS Evaluation");
 array_push($sql, "CREATE TABLE SentimentValues(Token VARCHAR(30) NOT NULL UNIQUE PRIMARY KEY, Sentiment FLOAT)");
 array_push($sql, "CREATE TABLE Prospectus(ISIN CHAR(12), Sentiment FLOAT, Timestamp TIMESTAMP, Period SMALLINT , FOREIGN KEY (ISIN) REFERENCES Shares(ISIN))");
+array_push($sql, "CREATE TABLE Evaluation(ISIN CHAR(12), Sentiment FLOAT, Timestamp TIMESTAMP, Period SMALLINT , RelativeChange FLOAT, Success BOOLEAN, FOREIGN KEY (ISIN) REFERENCES Shares(ISIN))");
 
 // Execute queries
 foreach ($sql as $statement) {

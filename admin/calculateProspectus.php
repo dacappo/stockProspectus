@@ -6,7 +6,7 @@ $periodForProspectus = $_GET['period'];
 $dbh = connectToDatabase("localhost","dacappa","veryoftirjoicTeg3","dacappa_stockProspectus");
 
 // Get all tweet IDs
-$stmtTweetIDs = $dbh->prepare('SELECT DISTINCT tw.TweetID, tw.ISIN FROM dacappa_stockProspectus.Tweets AS tw, dacappa_stockProspectus.TweetTokens AS tok WHERE tw.TweetID = tok.TweetID AND tw.ISIN = tok.ISIN');
+$stmtTweetIDs = $dbh->prepare('SELECT DISTINCT tw.TweetID, tw.ISIN FROM dacappa_stockProspectus.Tweets AS tw, dacappa_stockProspectus.TweetTokens AS tok WHERE tw.TweetID = tok.TweetID AND tw.ISIN = tok.ISIN AND tw.Sentiment IS NULL');
 
 // Get sentiments of tokens contained in tweet
 $stmtTweetTokenSentiments = $dbh->prepare('SELECT AVG(Sentiment) AS Sentiment FROM dacappa_stockProspectus.TweetTokens AS Tok, dacappa_stockProspectus.SentimentValues AS Val WHERE TweetID = :tweetID AND ISIN = :isin AND Tok.Token = Val.Token');
@@ -23,6 +23,23 @@ $stmtSetTweetSentiment = $dbh->prepare('UPDATE Tweets SET Sentiment = :tweetSent
 $stmtSetTweetSentiment->bindParam(':tweetID', $tweetID);
 $stmtSetTweetSentiment->bindParam(':isin', $isin);
 $stmtSetTweetSentiment->bindParam(':tweetSentiment', $tweetSentiment);
+
+
+// Calculate evaluation before setting new prospectus
+$stmtGetEvaluationProspectus = $dbh->prepare('SELECT pro.ISIN, StockIndex, Sentiment, pro.Timestamp FROM dacappa_stockprospectus.prospectus AS pro, shares WHERE pro.Period = :period AND DATE_ADD(DATE_ADD(Timestamp, INTERVAL :period HOUR), INTERVAL 10 Minute) >= NOW() AND shares.ISIN = pro.isin');
+$stmtGetEvaluationProspectus->bindParam(':period', $periodForProspectus);
+
+$stmtGetEvaluationResults = $dbh->prepare('SELECT Current.ISIN, Current.Timestamp, Current.Value, Current.SpreadH - Average.SpreadH AS RelativeH,Current.SpreadD - Average.SpreadD AS RelativeD,Current.SpreadW - Average.SpreadW AS RelativeW FROM (SELECT * FROM ShareValues WHERE ShareValues.ISIN = :isin ORDER BY ShareValues.Timestamp DESC LIMIT 1) AS Current, (SELECT AVG(SpreadH) AS SpreadH, AVG(SpreadD) AS SpreadD, AVG(SpreadW) AS SpreadW FROM(SELECT ShareValues.SpreadH AS SpreadH, ShareValues.SpreadD AS SpreadD, ShareValues.SpreadW AS SpreadW FROM Shares, ShareValues WHERE Shares.ISIN = ShareValues.ISIN AND Shares.StockIndex = :index ORDER BY ShareValues.Timestamp DESC LIMIT 30) AS Average) AS Average');
+$stmtGetEvaluationResults->bindParam(':index', $index);
+$stmtGetEvaluationResults->bindParam(':isin', $isin);
+
+$stmtWriteEvaluation = $dbh->prepare('INSERT INTO Evaluation VALUES(:isin, :prospectus, :timestmp, :period, :change, :success)');
+$stmtWriteEvaluation->bindParam(':isin', $isin);
+$stmtWriteEvaluation->bindParam(':prospectus', $prospectus);
+$stmtWriteEvaluation->bindParam(':timestmp', $timestamp);
+$stmtWriteEvaluation->bindParam(':period', $periodForProspectus);
+$stmtWriteEvaluation->bindParam(':change', $change);
+$stmtWriteEvaluation->bindParam(':success', $success);
 
 
 // Get all ISINs with tweets
@@ -87,9 +104,60 @@ while ($row = $stmtTweetIDs->fetch()) {
     }
 }
 
+
+/*
+ * Calculate evaluation
+ */
+
+if ($stmtGetEvaluationProspectus->execute()){
+    echo "Query ran successfully: <span>" . $stmtGetEvaluationProspectus->queryString . "</span><br>";
+} else {
+    echo "Error running query: " . array_pop($stmtGetEvaluationProspectus->errorInfo()) . " : <span>" . $stmtGetEvaluationProspectus->queryString . "</span><br>";
+}
+
+while ($row = $stmtGetEvaluationProspectus->fetch()) {
+    $isin = $row['ISIN'];
+    $index = $row['StockIndex'];
+    $prospectus = $row['Sentiment'];
+    $timestamp = $row['Timestamp'];
+
+    if ($stmtGetEvaluationResults->execute()){
+        echo "Query ran successfully: <span>" . $stmtGetEvaluationResults->queryString . "</span><br>";
+    } else {
+        echo "Error running query: " . array_pop($stmtGetEvaluationResults->errorInfo()) . " : <span>" . $stmtGetEvaluationResults->queryString . "</span><br>";
+    }
+
+    $back = $stmtGetEvaluationResults->fetch();
+
+    if ($periodForProspectus = 1) {
+        $change = $back['RelativeH'];
+    } else if ($periodForProspectus = 24) {
+        $change = $back['RelativeD'];
+    } else if ($periodForProspectus = 168) {
+        $change = $back['RelativeW'];
+    } else {
+        $change = 0;
+    }
+
+    if ($change > 0 && $prospectus > 0 || $change < 0 && $prospectus < 0) {
+        $success = true;
+    } else {
+        $success = false;
+    }
+
+    if ($stmtWriteEvaluation->execute()){
+        echo "Query ran successfully: <span>" . $stmtWriteEvaluation->queryString . "</span><br>";
+    } else {
+        echo "Error running query: " . array_pop($stmtWriteEvaluation->errorInfo()) . " : <span>" . $stmtWriteEvaluation->queryString . "</span><br>";
+    }
+
+}
+
+
 /*
  * Calculate share prospectus out of tweet sentiments
  */
+
 if ($stmtGetISINs->execute()){
     echo "Query ran successfully: <span>" . $stmtGetISINs->queryString . "</span><br>";
 } else {

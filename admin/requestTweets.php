@@ -24,7 +24,7 @@ $stmtQueries = $dbh->prepare('SELECT Shares.ISIN, TweetSearch.Query FROM Shares,
 $stmtLatestTweet = $dbh->prepare('SELECT TweetID FROM Tweets WHERE ISIN = :isin ORDER BY TweetID DESC LIMIT 1;');
 $stmtLatestTweet->bindParam(':isin', $isin);
 
-$stmtTweet = $dbh->prepare('INSERT INTO Tweets VALUES(:tweetID, :isin, FROM_UNIXTIME(:createdAt), :retweets,:tweet, 0)');
+$stmtTweet = $dbh->prepare('INSERT INTO Tweets VALUES(:tweetID, :isin, FROM_UNIXTIME(:createdAt), :retweets,:tweet, NULL)');
 $stmtTweet->bindParam(':tweetID', $tweetID);
 $stmtTweet->bindParam(':isin', $isin);
 $stmtTweet->bindParam(':createdAt', $createdAt);
@@ -59,7 +59,8 @@ while ($row = $stmtQueries->fetch()) {
         echo "Error running query: " . array_pop($stmtLatestTweet->errorInfo()) . " : <span>" . $stmtLatestTweet->queryString . "</span><br>";
     }
 
-    $latestTweetId = $stmtLatestTweet->fetch()['TweetID'];
+    $latestTweetArray = $stmtLatestTweet->fetch();
+    $latestTweetId = $latestTweetArray['TweetID'];
 
     // Twitter API call
     $start = microtime(true);
