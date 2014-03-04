@@ -57,6 +57,21 @@ $stmtWriteProspectus->bindParam(':isin', $ISIN);
 $stmtWriteProspectus->bindParam(':prospectus', $prospectus);
 $stmtWriteProspectus->bindParam(':period', $periodForProspectus);
 
+/*
+ * Statements for prospectus optimization
+ */
+
+// Get quality ratio
+$stmtGetEvaluationRatio = $dbh->prepare('SELECT Positive.Count AS Positive, Negative.Count AS Negative FROM (SELECT Count(*) AS Count FROM dacappa_stockProspectus.Evaluation WHERE ISIN = :isin AND Period = :period AND RelativeChange != 0 AND Success = 1) AS Positive,(SELECT Count(*) AS Count FROM dacappa_stockProspectus.Evaluation WHERE ISIN = :isin AND Period = :period AND RelativeChange != 0 AND Success = 0) AS Negative');
+$stmtGetEvaluationRatio->bindParam(':isin', $ISIN);
+$stmtGetEvaluationRatio->bindParam(':period', $periodForProspectus);
+
+// Get direction for sentiment shift
+
+$stmtGetEvaluationShift = $dbh->prepare('Select ToPositive.Count AS ToPositive, ToNegative.Count as ToNegative FROM (SELECT Count(*) AS Count FROM dacappa_stockProspectus.Evaluation WHERE ISIN = :isin AND Period = :period AND Success = 0 AND Sentiment < 0 AND RelativeChange > 0) AS ToNegative, (SELECT Count(*) AS Count FROM dacappa_stockProspectus.Evaluation WHERE ISIN = :isin AND Period = :period AND Success = 0 AND Sentiment > 0 AND RelativeChange < 0) AS ToPositive');
+$stmtGetEvaluationShift->bindParam(':isin', $ISIN);
+$stmtGetEvaluationShift->bindParam(':period', $periodForProspectus);
+
 
 /*
  * Calculate tweet sentiments
@@ -129,11 +144,11 @@ while ($row = $stmtGetEvaluationProspectus->fetch()) {
 
     $back = $stmtGetEvaluationResults->fetch();
 
-    if ($periodForProspectus = 1) {
+    if ($periodForProspectus == 1) {
         $change = $back['RelativeH'];
-    } else if ($periodForProspectus = 24) {
+    } else if ($periodForProspectus == 24) {
         $change = $back['RelativeD'];
-    } else if ($periodForProspectus = 168) {
+    } else if ($periodForProspectus == 168) {
         $change = $back['RelativeW'];
     } else {
         $change = 0;
@@ -185,22 +200,90 @@ while ($row = $stmtGetISINs->fetch()) {
 
     $prospectus = round(($prospectus/$divider),3);
 
-    array_push($prospectusEntries, array('ISIN' => $ISIN, 'Prospectus' => $prospectus));
+    /*
+    * Perform single optimization
+    */
+    if ($stmtGetEvaluationRatio->execute()){
+        echo "Query ran successfully: <span>" . $stmtGetEvaluationRatio->queryString . "</span><br>";
+    } else {
+        echo "Error running query: " . array_pop($stmtGetEvaluationRatio->errorInfo()) . " : <span>" . $stmtGetEvaluationRatio->queryString . "</span><br>";
+    }
+
+    if ($stmtGetEvaluationShift->execute()){
+        echo "Query ran successfully: <span>" . $stmtGetEvaluationShift->queryString . "</span><br>";
+    } else {
+        echo "Error running query: " . array_pop($stmtGetEvaluationShift->errorInfo()) . " : <span>" . $stmtGetEvaluationShift->queryString . "</span><br>";
+    }
+
+    $RatioResult = $stmtGetEvaluationRatio->fetch();
+    $ShiftResult = $stmtGetEvaluationShift->fetch();
+
+    $factorForShift = 1;
+
+    if($RatioResult['Positive'] != 0 && $RatioResult['Negative'] != 0) {
+        // check to do not fuck up a good prospectus
+        if (($RatioResult['Negative']/($RatioResult['Negative']+$RatioResult['Positive'])) >= 0.3) {
+            $factorForShift = $factorForShift * ($RatioResult['Negative']/($RatioResult['Negative']+$RatioResult['Positive']));
+            if ($ShiftResult['ToPositive'] != 0 && $ShiftResult['ToNegative'] != 0) {
+                if (($ShiftResult['ToPositive']/($ShiftResult['ToNegative']+$ShiftResult['ToPositive'])) > ($ShiftResult['ToNegative']/($ShiftResult['ToNegative']+$ShiftResult['ToPositive'])))  {
+                    // prospectus to positive
+                    $factorForShift = $factorForShift * ($ShiftResult['ToPositive']/($ShiftResult['ToNegative']+$ShiftResult['ToPositive'])) * -1;
+                } else {
+                    // prospectus to negative
+                    $factorForShift = $factorForShift * ($ShiftResult['ToNegative']/($ShiftResult['ToNegative']+$ShiftResult['ToPositive']));
+                }
+
+            } else if ($ShiftResult['ToPositive'] == 0) {
+                // prospectus to negative
+                $factorForShift = $factorForShift * 1;
+            } else if ($ShiftResult['ToNegative'] == 0) {
+                // prospectus to positive
+                $factorForShift = $factorForShift * -1;
+            }
+            $prospectus = $prospectus + (abs($prospectus) * $factorForShift);
+        }
+    } else if ($RatioResult['Positive'] == 0 && $RatioResult['Negative'] != 0 && $RatioResult['Negative'] > 2) { // 2 For at least 3 wrong prospectusses before correction
+        // pros totally wrong yet
+        $factorForShift = $factorForShift * 1;
+        if ($ShiftResult['ToPositive'] != 0 && $ShiftResult['ToNegative'] != 0) {
+            if (($ShiftResult['ToPositive']/($ShiftResult['ToNegative']+$ShiftResult['ToPositive'])) > ($ShiftResult['ToNegative']/($ShiftResult['ToNegative']+$ShiftResult['ToPositive'])))  {
+                // prospectus to positive
+                $factorForShift = $factorForShift * ($ShiftResult['ToPositive']/($ShiftResult['ToNegative']+$ShiftResult['ToPositive'])) * -1;
+            } else {
+                // prospectus to negative
+                $factorForShift = $factorForShift * ($ShiftResult['ToNegative']/($ShiftResult['ToNegative']+$ShiftResult['ToPositive']));
+            }
+            $prospectus = $prospectus + (abs($prospectus) * $factorForShift);
+        } else if ($ShiftResult['ToPositive'] == 0) {
+            // prospectus to negative
+            $factorForShift = $factorForShift * 1;
+        } else if ($ShiftResult['ToNegative'] == 0) {
+            // prospectus to positive
+            $factorForShift = $factorForShift * -1;
+        }
+        $prospectus = $prospectus + (abs($prospectus) * $factorForShift);
+    } else if ($RatioResult['Negative'] == 0) {
+        // Perfect :D
+    }
+
+
+    array_push($prospectusEntries, array('ISIN' => $ISIN, 'Prospectus' => round($prospectus,3)));
 }
 
 //TODO: Filter Prospectus with to less tweets
-//TODO: Prospectus calculation in relation to overall sentiment of share tweets -> sometime general positive sentiment
 
-// Write prospectus to database & perform some optimization
+
+
+// Write prospectus to database & perform general optimization
 
 foreach ($prospectusEntries AS $entry) {
 
     $ISIN = $entry['ISIN'];
     $prospectus = $entry['Prospectus'];
-    $prospectus = $prospectus - averageProspectus($prospectusEntries); //TODO: Value can become >1 or <-1
+    $prospectus = $prospectus - averageProspectus($prospectusEntries, substr($ISIN, 0,2)); //TODO: Value can become >1 or <-1
 
     if ($stmtWriteProspectus->execute()){
-        echo "Query ran successfully: <span>" . $stmtWriteProspectus->queryString . "</span><br>";
+        echo "Query ran successfully: <span>" . $stmtWriteProspectus->queryString . ' - ' . $periodForProspectus . ' - ' . $prospectus . ' - ' . averageProspectus($prospectusEntries, substr($ISIN, 0,2)) . "</span><br>";
     } else {
         echo "Error running query: " . array_pop($stmtWriteProspectus->errorInfo()) . " : <span>" . $stmtWriteProspectus->queryString . "</span><br>";
     }
@@ -210,10 +293,15 @@ function average($array) {
     return array_sum($array) / count($array);
 }
 
-function averageProspectus($array){
+function averageProspectus($array, $index){
     $sum = 0;
+    $count = 0;
     foreach ($array as $entry) {
-        $sum += $entry['Prospectus'];
+        if (substr($entry['ISIN'],0,2) == $index) {
+            $sum += $entry['Prospectus'];
+            $count++;
+        }
     }
-    return round($sum / count($array),3);
+    return round($sum / $count,3);
+
 }
